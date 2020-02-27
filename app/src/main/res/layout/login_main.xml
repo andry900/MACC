@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:contex=".MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/linearLayout"
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_firebase_logo"
+        android:contentDescription="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:text="@string/firebase_login"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/image"
+        android:gravity="center"/>
+    
+    <ProgressBar
+        android:visibility="invisible"
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" />
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:text="@string/login_with_google"
+        android:textColor="#000"
+        android:textAlignment="center"
+        android:background="@drawable/round_bg"
+        android:drawableStart="@drawable/ic_google_logo" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_alignTop="@+id/imageView"
-            android:layout_marginTop="200dp"
-            android:text="CIAO" />
-
-        <Button
-            android:id="@+id/buttonLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:drawableStart="@drawable/ic_google_logo"
-            android:layout_alignTop="@+id/textView"
-            android:layout_marginTop="50dp"
-            android:text="    Login with Google" />
-
-    </RelativeLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <Button
+        android:visibility="invisible"
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:text="@string/logout"
+        android:textColor="#000"
+        android:background="@drawable/round_bg"
+        android:drawableStart="@drawable/ic_google_logo" />
+</RelativeLayout>

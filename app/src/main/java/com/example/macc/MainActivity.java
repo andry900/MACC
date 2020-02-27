@@ -2,90 +2,57 @@ package com.example.macc;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.util.Log;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.squareup.picasso.Picasso;
-
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    static final int GOOGLE_SIGN = 123;
-    private AppBarConfiguration mAppBarConfiguration;
+    static final int GOOGLE_SIGN_IN = 123;
     private FirebaseAuth mAuth;
-    private Button buttonLogin;
-    private TextView textView;
+    private Button btn_login, btn_logout;
+    private TextView text;
     private ImageView image;
-    private GoogleSignInClient googleSignInClient;
+    private ProgressBar progressBar;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Initialize Firebase Auth
+        btn_login = findViewById(R.id.login);
+        btn_logout = findViewById(R.id.logout);
+        text = findViewById(R.id.text);
+        image = findViewById(R.id.image);
+        progressBar = findViewById(R.id.progress_circular);
+
         mAuth = FirebaseAuth.getInstance();
-        buttonLogin = findViewById(R.id.buttonLogin);
-        textView = findViewById(R.id.textView);
-        image = findViewById(R.id.imageView);
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
-                .Builder()
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        buttonLogin.setOnClickListener(v -> SignInGoogle());
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        btn_login.setOnClickListener(v -> SignInGoogle());
+        btn_logout.setOnClickListener(v -> Logout());
 
         if (mAuth.getCurrentUser() != null) {
             FirebaseUser user = mAuth.getCurrentUser();
@@ -93,44 +60,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void SignInGoogle() {
-        Intent signIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signIntent, GOOGLE_SIGN);
+    public void SignInGoogle() {
+        progressBar.setVisibility(View.VISIBLE);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        Log.d("TAG", "signInWithCredential:success");
+
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        Log.w("TAG", "signInWithCredential:failure", task.getException());
+
+                        Toast.makeText(this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GOOGLE_SIGN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn
-                    .getSignedInAccountFromIntent(data);
 
+        if (requestCode == GOOGLE_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) {
-                    firebaseAuthWithGoogle(account);
-                }
+                if (account != null) firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                e.printStackTrace();
+                Log.w("TAG", "Google sign in failed", e);
             }
         }
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        Log.d("TAG", "firebaseAuthWithGoogle: " + account.getId());
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this, task -> {
-                if (task.isSuccessful()) {
-                    Log.d("TAG", "signIn success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
-                } else {
-                    Log.d("TAG", "signIn failure", task.getException());
-                    Toast.makeText(this, "SignIn Failed!", Toast.LENGTH_SHORT);
-                    updateUI(null);
-                }
-            });
     }
 
     private void updateUI(FirebaseUser user) {
@@ -139,25 +112,22 @@ public class MainActivity extends AppCompatActivity {
             String email = user.getEmail();
             String photo = String.valueOf(user.getPhotoUrl());
 
-            textView.append("Info:\n");
-            textView.append(name + "\n");
-            textView.append(email + "\n");
-
+            text.append("\n\nName: " + name + "\n");
+            text.append("Email: " + email);
             Picasso.get().load(photo).into(image);
+            btn_logout.setVisibility(View.VISIBLE);
+            btn_login.setVisibility(View.INVISIBLE);
+        } else {
+            text.setText(R.string.firebase_login);
+            image.setImageResource(R.drawable.ic_firebase_logo);
+            btn_logout.setVisibility(View.INVISIBLE);
+            btn_login.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    private void Logout() {
+        FirebaseAuth.getInstance().signOut();
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                task -> updateUI(null));
     }
 }
