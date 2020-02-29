@@ -2,12 +2,15 @@ package com.example.macc;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import android.os.Parcelable;
 import android.util.Log;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,14 +25,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MainActivity extends AppCompatActivity implements Serializable {
+
     static final int GOOGLE_SIGN_IN = 123;
-    private FirebaseAuth mAuth;
-    private Button btn_login, btn_logout;
-    private TextView text;
-    private ImageView image;
-    private ProgressBar progressBar;
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+
+    private Button btn_login, btn_logout;
+    private TextView loginText;
+    private ImageView imageLogin;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.login_main);
 
         btn_login = findViewById(R.id.login);
-        btn_logout = findViewById(R.id.logout);
-        text = findViewById(R.id.text);
-        image = findViewById(R.id.image);
+        //btn_logout = findViewById(R.id.logout);
+        loginText = findViewById(R.id.text);
+
+        imageLogin = findViewById(R.id.image);
+
         progressBar = findViewById(R.id.progress_circular);
 
         mAuth = FirebaseAuth.getInstance();
@@ -52,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         btn_login.setOnClickListener(v -> SignInGoogle());
-        btn_logout.setOnClickListener(v -> Logout());
+//        btn_logout.setOnClickListener(v -> Logout());
 
         if (mAuth.getCurrentUser() != null) {
             FirebaseUser user = mAuth.getCurrentUser();
@@ -108,18 +117,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            String photo = String.valueOf(user.getPhotoUrl());
 
-            text.append("\n\nName: " + name + "\n");
-            text.append("Email: " + email);
-            Picasso.get().load(photo).into(image);
-            btn_logout.setVisibility(View.VISIBLE);
-            btn_login.setVisibility(View.INVISIBLE);
+            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("user", user); //make YOUR_OBJECT implement parcelable
+
+            homeActivity.putExtra("bundle_data", bundle);
+
+            startActivity(homeActivity);
+
+            //btn_logout.setVisibility(View.VISIBLE);
+            //btn_login.setVisibility(View.INVISIBLE);
         } else {
-            text.setText(R.string.firebase_login);
-            image.setImageResource(R.drawable.ic_firebase_logo);
+            loginText.setText(R.string.firebase_login);
+            imageLogin.setImageResource(R.drawable.ic_firebase_logo);
             btn_logout.setVisibility(View.INVISIBLE);
             btn_login.setVisibility(View.VISIBLE);
         }
