@@ -75,6 +75,7 @@ public class NavigationActivity extends AppCompatActivity {
         Uri path_photo = user.getPhotoUrl();
         System.out.println("URIIIIIIIIII: " + user.getPhotoUrl());
 
+        //add the relation to the header of the navigation bar
         NavigationView navigationView =  findViewById(R.id.nav_view);
         View nav_header_main = navigationView.getHeaderView(0);
         TextView nameTextView = nav_header_main.findViewById(R.id.nameTextView);

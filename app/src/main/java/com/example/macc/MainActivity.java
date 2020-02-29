@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
 
+            //to pass user object as parameter in the intent
             Intent navigationActivity = new Intent(MainActivity.this,NavigationActivity.class);
             Bundle bundle = new Bundle();
             bundle.putParcelable("user", user); //make YOUR_OBJECT implement parcelable
