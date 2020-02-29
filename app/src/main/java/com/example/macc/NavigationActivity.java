@@ -1,7 +1,14 @@
 package com.example.macc;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -9,9 +16,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 public class NavigationActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
@@ -36,6 +46,7 @@ public class NavigationActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        loadLoggedUserData();
     }
 
     @Override
@@ -50,5 +61,33 @@ public class NavigationActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void loadLoggedUserData(){
+
+        Intent navigationActivity = getIntent();
+        Bundle bundle = navigationActivity.getBundleExtra("bundle_data");
+        Object object = bundle.getParcelable("user");
+        FirebaseUser user = (FirebaseUser) object;
+
+        String name = user.getDisplayName();
+        String email = user.getEmail();;
+        Uri path_photo = user.getPhotoUrl();
+        System.out.println("URIIIIIIIIII: " + user.getPhotoUrl());
+
+        NavigationView navigationView =  findViewById(R.id.nav_view);
+        View nav_header_main = navigationView.getHeaderView(0);
+        TextView nameTextView = nav_header_main.findViewById(R.id.nameTextView);
+        TextView emailTextView =  nav_header_main.findViewById(R.id.emailTextView);
+        ImageView imageView =  nav_header_main.findViewById(R.id.imageView);
+
+        nameTextView.append(name);
+        emailTextView.append(email);
+        if (path_photo == null) {
+            Picasso.get().load(R.drawable.ic_firebase_logo).into(imageView);
+        }else{
+            Picasso.get().load(path_photo).into(imageView);
+        }
+
     }
 }

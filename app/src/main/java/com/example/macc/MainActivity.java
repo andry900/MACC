@@ -118,13 +118,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
 
-            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
+            Intent navigationActivity = new Intent(MainActivity.this,NavigationActivity.class);
             Bundle bundle = new Bundle();
             bundle.putParcelable("user", user); //make YOUR_OBJECT implement parcelable
-
-            homeActivity.putExtra("bundle_data", bundle);
-
-            startActivity(homeActivity);
+            navigationActivity.putExtra("bundle_data", bundle);
+            startActivity(navigationActivity);
 
             //btn_logout.setVisibility(View.VISIBLE);
             //btn_login.setVisibility(View.INVISIBLE);
@@ -141,4 +139,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 task -> updateUI(null));
     }
+
+
 }
