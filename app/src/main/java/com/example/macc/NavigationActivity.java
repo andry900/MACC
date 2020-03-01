@@ -1,14 +1,11 @@
 package com.example.macc;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -16,10 +13,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
@@ -29,6 +26,7 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,10 +41,19 @@ public class NavigationActivity extends AppCompatActivity {
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        loadLoggedUserData();
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            loadLoggedUserData(user);
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     @Override
@@ -63,32 +70,24 @@ public class NavigationActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void loadLoggedUserData(){
-
-        Intent navigationActivity = getIntent();
-        Bundle bundle = navigationActivity.getBundleExtra("bundle_data");
-        Object object = bundle.getParcelable("user");
-        FirebaseUser user = (FirebaseUser) object;
-
+    public void loadLoggedUserData(FirebaseUser user) {
         String name = user.getDisplayName();
         String email = user.getEmail();;
-        Uri path_photo = user.getPhotoUrl();
-        System.out.println("URIIIIIIIIII: " + user.getPhotoUrl());
+        Uri photo = user.getPhotoUrl();
 
-        //add the relation to the header of the navigation bar
         NavigationView navigationView =  findViewById(R.id.nav_view);
         View nav_header_main = navigationView.getHeaderView(0);
+
         TextView nameTextView = nav_header_main.findViewById(R.id.nameTextView);
         TextView emailTextView =  nav_header_main.findViewById(R.id.emailTextView);
         ImageView imageView =  nav_header_main.findViewById(R.id.imageView);
 
         nameTextView.append(name);
         emailTextView.append(email);
-        if (path_photo == null) {
-            Picasso.get().load(R.drawable.ic_firebase_logo).into(imageView);
-        }else{
-            Picasso.get().load(path_photo).into(imageView);
+        if (photo == null) {
+            imageView.setImageResource(R.drawable.ic_firebase_logo);
+        } else {
+            Picasso.get().load(photo).into(imageView);
         }
-
     }
 }

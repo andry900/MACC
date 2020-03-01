@@ -2,21 +2,17 @@ package com.example.macc;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-
-import android.os.Parcelable;
 import android.util.Log;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.squareup.picasso.Picasso;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -24,15 +20,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
-
     static final int GOOGLE_SIGN_IN = 123;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-
     private Button btn_login, btn_logout;
     private TextView loginText;
     private ImageView imageLogin;
@@ -117,12 +110,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-
-            //to pass user object as parameter in the intent
-            Intent navigationActivity = new Intent(MainActivity.this,NavigationActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("user", user); //make YOUR_OBJECT implement parcelable
-            navigationActivity.putExtra("bundle_data", bundle);
+            Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
             startActivity(navigationActivity);
 
             //btn_logout.setVisibility(View.VISIBLE);
@@ -140,6 +128,4 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 task -> updateUI(null));
     }
-
-
 }
