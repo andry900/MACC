@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -120,28 +121,34 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FrameLayout fl = findViewById(R.id.nav_host_fragment);
         switch (item.getItemId()) {
             case R.id.nav_home:
+                fl.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new HomeFragment()).commit();
                 break;
 
             case R.id.nav_profile:
+                fl.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new ProfileFragment()).commit();
                 break;
 
             case R.id.nav_reviews:
+                fl.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new ReviewsFragment()).commit();
                 break;
 
             case R.id.nav_tools:
+                fl.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new ToolsFragment()).commit();
                 break;
 
             case R.id.nav_info:
+                fl.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new InformationFragment()).commit();
                 break;
