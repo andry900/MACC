@@ -5,21 +5,18 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="menu_home">Home</string>
     <string name="menu_profile">Profile</string>
-    <string name="menu_reviews">My Reviews</string>
-    <string name="menu_tools">Tools</string>
+    <string name="menu_reviews">Reviews</string>
     <string name="menu_info">Information</string>
-    <string name="menu_send">Send</string>
     <string name="login_with_google">Login with Google</string>
     <string name="logout">Logout</string>
-    <string name="firebase_login">Firebase Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="login_with_facebook">Login with facebook</string>
-    <string name="virgilio">Virgilio</string>
+    <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_in_our_system">Login in our system</string>
     <string name="login">Login</string>
     <string name="sign_in">Sign In</string>
+    <string name="action_settings">Settings</string>
+    <string name="exit">Exit</string>
 </resources>
