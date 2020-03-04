@@ -17,10 +17,6 @@
             android:icon="@drawable/ic_reviews_logo"
             android:title="@string/menu_reviews" />
         <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
-        <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_info_logo"
             android:title="@string/menu_info" />

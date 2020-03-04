@@ -1,6 +1,7 @@
 package com.example.macc;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -9,20 +10,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import android.util.Log;
-
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,9 +26,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     static final int GOOGLE_SIGN_IN = 123;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-    private Button btn_login, btn_logout;
-    private TextView loginText;
-    private ImageView imageLogin;
     private ProgressBar progressBar;
 
     @Override
@@ -42,12 +33,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
 
-        btn_login = findViewById(R.id.login);
-        //btn_logout = findViewById(R.id.logout);
-        loginText = findViewById(R.id.text);
+        TextView app_name = findViewById(R.id.virgilio);
+        TextView login_info = findViewById(R.id.login_info);
 
-        imageLogin = findViewById(R.id.image);
+        //changeFont(app_name, "fonts/LemonJellyPersonalUse-dEqR");
+        //changeFont(login_info, "fonts/LemonJellyPersonalUse-dEqR");
 
+        TextView email = findViewById(R.id.email);
+        TextView password = findViewById(R.id.password);
+        Button google_login = findViewById(R.id.google_login);
+        Button facebook_login = findViewById(R.id.facebook_login);
         progressBar = findViewById(R.id.progress_circular);
 
         mAuth = FirebaseAuth.getInstance();
@@ -59,13 +54,17 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        btn_login.setOnClickListener(v -> SignInGoogle());
-//        btn_logout.setOnClickListener(v -> Logout());
+        google_login.setOnClickListener(v -> SignInGoogle());
+        facebook_login.setOnClickListener(v -> SignInFacebook());
 
         if (mAuth.getCurrentUser() != null) {
             FirebaseUser user = mAuth.getCurrentUser();
             updateUI(user);
         }
+    }
+
+    private void SignInFacebook() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void SignInGoogle() {
@@ -124,15 +123,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     "26/08/1994", "Università di Roma 'La Sapienza'", "Engineering");
 
             dbAccess.InsertUser(newUser);
-
-            //btn_logout.setVisibility(View.VISIBLE);
-            //btn_login.setVisibility(View.INVISIBLE);
-        } else {
-            loginText.setText(R.string.firebase_login);
-            imageLogin.setImageResource(R.drawable.ic_firebase_logo);
-            btn_logout.setVisibility(View.INVISIBLE);
-            btn_login.setVisibility(View.VISIBLE);
         }
     }
 
+    public void changeFont(TextView textView,String pathFont){
+        //pathFont must be in this way : "font/name_font.ttf / .otf"
+        Typeface typeface = Typeface.createFromAsset(getAssets(),pathFont);
+        textView.setTypeface(typeface);
+    }
 }

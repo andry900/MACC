@@ -23,7 +23,6 @@ import com.example.macc.ui.home.HomeFragment;
 import com.example.macc.ui.information.InformationFragment;
 import com.example.macc.ui.profile.ProfileFragment;
 import com.example.macc.ui.reviews.ReviewsFragment;
-import com.example.macc.ui.tools.ToolsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,7 +50,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_profile, R.id.nav_reviews,
-                R.id.nav_tools, R.id.nav_info, R.id.nav_logout)
+                R.id.nav_info, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -139,12 +138,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 fl.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new ReviewsFragment()).commit();
-                break;
-
-            case R.id.nav_tools:
-                fl.removeAllViews();
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ToolsFragment()).commit();
                 break;
 
             case R.id.nav_info:
