@@ -23,6 +23,7 @@ import com.example.macc.ui.home.HomeFragment;
 import com.example.macc.ui.information.InformationFragment;
 import com.example.macc.ui.profile.ProfileFragment;
 import com.example.macc.ui.reviews.ReviewsFragment;
+import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,14 +56,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 .build();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        //NavigationUI.setupWithNavController(navigationView, navController);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -84,8 +81,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
     public void loadLoggedUserData(FirebaseUser user) {
@@ -147,8 +143,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 break;
 
             case R.id.nav_logout:
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                LoginManager.getInstance().logOut();
                 startActivity(intent);
                 finish();
                 break;

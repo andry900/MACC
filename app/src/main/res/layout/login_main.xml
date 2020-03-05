@@ -104,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
         android:text="@string/login_with_google"
@@ -113,18 +113,15 @@
         android:background="@drawable/round_bg"
         android:drawableStart="@drawable/ic_google_logo" />
 
-    <Button
+    <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="26dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="26dp"
-        android:text="@string/login_with_facebook"
-        android:textColor="#000"
-        android:textAlignment="center"
-        android:background="@drawable/round_bg"
-        android:drawableStart="@drawable/ic_facebook_logo" />
+        android:layout_marginBottom="40dp" />
 
 </RelativeLayout>
