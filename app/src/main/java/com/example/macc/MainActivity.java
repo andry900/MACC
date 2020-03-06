@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import android.text.TextUtils;
 import android.util.Log;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -24,8 +25,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.io.Serializable;
 
@@ -35,19 +36,31 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private CallbackManager callbackManager;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+    private EditText email;
+    private EditText password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
 
-        TextView email = findViewById(R.id.email);
-        TextView password = findViewById(R.id.password);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        Button login = findViewById(R.id.login);
+        Button signIn = findViewById(R.id.sign_in);
+
         Button google_login = findViewById(R.id.google_login);
         LoginButton facebook_login = findViewById(R.id.facebook_login);
         progressBar = findViewById(R.id.progress_circular);
 
         mAuth = FirebaseAuth.getInstance();
+
+        //EMAIL & PASSWORD
+        login.setOnClickListener(v -> LoginBasic(email.getText().toString(), password.getText().toString()));
+        signIn.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), PopUpSignIn.class);
+            startActivity(intent);
+        });
 
         //GOOGLE
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,6 +102,46 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
+    public void LoginBasic(String pEmail, String pPassword) {
+        if (TextUtils.isEmpty(pEmail) || TextUtils.isEmpty(pPassword)) {
+            if (TextUtils.isEmpty(pEmail)) {
+                email.setError("Email can not be empty!");
+            }
+
+            if (TextUtils.isEmpty(pPassword)) {
+                password.setError("Password can not be empty!");
+            }
+        } else {
+            mAuth.signInWithEmailAndPassword(pEmail, pPassword)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            updateUI(null);
+                        }
+                    });
+        }
+    }
+
+    public void SignInBasic(String email, String password) {
+        mAuth = FirebaseAuth.getInstance();
+        
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        updateUI(null);
+                    }
+                });
+    }
+
     public void SignInGoogle() {
         progressBar.setVisibility(View.VISIBLE);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -113,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                         Log.w("TAG", "signInWithCredential:failure", task.getException());
 
-                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         updateUI(null);
                     }
                 });
@@ -170,6 +222,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     "26/08/1994", "Università di Roma 'La Sapienza'", "Engineering");
 
             dbAccess.InsertUser(newUser);
+        } else {
+            Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
         }
     }
 }

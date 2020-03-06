@@ -20,4 +20,8 @@
     <string name="exit">Exit</string>
     <string name="facebook_application_id" translatable="false">244497109904556</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb244497109904556</string>
+    <string name="labEmail">Email:</string>
+    <string name="labName">"Name: "</string>
+    <string name="labSurname">"Surname: "</string>
+    <string name="labPassword">"Password: "</string>
 </resources>

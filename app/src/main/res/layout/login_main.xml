@@ -109,7 +109,7 @@
         android:layout_marginRight="26dp"
         android:text="@string/login_with_google"
         android:textColor="#000"
-        android:textAlignment="center"
+        android:gravity="center"
         android:background="@drawable/round_bg"
         android:drawableStart="@drawable/ic_google_logo" />
 
