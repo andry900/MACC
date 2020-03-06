@@ -96,21 +96,18 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         TextView emailTextView =  nav_header_main.findViewById(R.id.emailTextView);
         ImageView imageView =  nav_header_main.findViewById(R.id.imageView);
 
-        nameTextView.append(name);
-        emailTextView.append(email);
+        if (name != null) {
+            nameTextView.append(name);
+        }
+
+        if (email != null) {
+            emailTextView.append(email);
+        }
+
         if (photo == null) {
-            imageView.setImageResource(R.drawable.ic_firebase_logo);
+            imageView.setImageResource(R.mipmap.ic_avatar);
         } else {
             Picasso.get().load(photo).into(imageView);
-        }
-    }
-
-    @Override
-    public void onBackPressed(){
-        if (drawer.isDrawerOpen(GravityCompat.START)){
-            drawer.closeDrawer(GravityCompat.START);
-        }else {
-            super.onBackPressed();
         }
     }
 

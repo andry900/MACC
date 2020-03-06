@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private CallbackManager callbackManager;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
-    private LoginButton facebook_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         TextView email = findViewById(R.id.email);
         TextView password = findViewById(R.id.password);
         Button google_login = findViewById(R.id.google_login);
-        facebook_login = findViewById(R.id.facebook_login);
+        LoginButton facebook_login = findViewById(R.id.facebook_login);
         progressBar = findViewById(R.id.progress_circular);
 
         mAuth = FirebaseAuth.getInstance();
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     Log.d("TAG", "facebook:onSuccess:" + loginResult);
+                    progressBar.setVisibility(View.VISIBLE);
                     handleFacebookAccessToken(loginResult.getAccessToken());
                 }
 
