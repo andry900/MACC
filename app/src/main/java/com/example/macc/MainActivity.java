@@ -28,7 +28,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.Serializable;
-import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     static final int GOOGLE_SIGN_IN = 123;
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         callbackManager = CallbackManager.Factory.create();
         facebook_login.setPermissions("email", "public_profile");
         facebook_login.setOnClickListener(v -> {
-            LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("public_profile"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
