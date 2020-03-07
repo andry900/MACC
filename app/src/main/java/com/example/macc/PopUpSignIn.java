@@ -31,7 +31,10 @@ public class PopUpSignIn extends Activity {
             String txtEmail = popup_email.getText().toString();
             String txtPassword = popup_password.getText().toString();
 
-            if (TextUtils.isEmpty(txtName) || TextUtils.isEmpty(txtSurname) || TextUtils.isEmpty(txtEmail) || TextUtils.isEmpty(txtPassword)) {
+            if (TextUtils.isEmpty(txtName) || TextUtils.isEmpty(txtSurname) ||
+                    (TextUtils.isEmpty(txtEmail) || !Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches())  ||
+                    (TextUtils.isEmpty(txtPassword) || txtPassword.length() < 6)) {
+
                 if (TextUtils.isEmpty(txtName)) {
                     popup_name.setError("Please enter your Name!");
                 }
