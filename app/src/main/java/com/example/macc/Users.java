@@ -9,7 +9,8 @@ public class Users {
     private String university;
     private String department;
 
-    Users(String name, String surname, String email, String date_birth, String university, String department) {
+    Users(String id, String name, String surname, String email, String date_birth, String university, String department) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;

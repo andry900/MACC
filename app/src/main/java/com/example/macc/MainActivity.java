@@ -22,6 +22,13 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -78,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-                    Log.d("TAG", "facebook:onSuccess:" + loginResult);
                     progressBar.setVisibility(View.VISIBLE);
                     handleFacebookAccessToken(loginResult.getAccessToken());
                 }
@@ -98,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         //CHECK USER STATE
         if (mAuth.getCurrentUser() != null) {
             FirebaseUser user = mAuth.getCurrentUser();
-            updateUI(user);
+            updateUI("", "", user);
         }
     }
 
@@ -117,16 +123,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI("", "", user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            updateUI(null);
+                            updateUI("", "", null);
                         }
                     });
         }
     }
 
-    public void SignInBasic(String email, String password) {
+    public void SignInBasic(String name, String surname, String email, String password) {
         mAuth = FirebaseAuth.getInstance();
         
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -134,10 +140,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
+                        updateUI(name, surname, user);
                     } else {
                         // If sign in fails, display a message to the user.
-                        updateUI(null);
+                        updateUI(name, surname, null);
                     }
                 });
     }
@@ -149,46 +155,35 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.getId());
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        Log.d("TAG", "signInWithCredential:success");
-
                         FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
+                        updateUI("", "", user);
                     } else {
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        Log.w("TAG", "signInWithCredential:failure", task.getException());
-
-                        updateUI(null);
+                        updateUI("", "", null);
                     }
                 });
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d("TAG", "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        Log.d("TAG", "signInWithCredential:success");
-
                         FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
+                        updateUI("", "", user);
                     } else {
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        Log.w("TAG", "signInWithCredential:failure", task.getException());
-                        updateUI(null);
+                        updateUI("", "", null);
                     }
                 });
     }
@@ -212,18 +207,47 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(String name, String surname, FirebaseUser user) {
         if (user != null) {
-            Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
-            startActivity(navigationActivity);
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            Query query = rootRef.child("users").orderByChild("email").equalTo(user.getEmail());
 
-            DatabaseAccess dbAccess = new DatabaseAccess();
-            Users newUser = new Users("Andrea", "Bellia", "bellia.1586420@studenti.uniroma1.it",
-                    "26/08/1994", "Università di Roma 'La Sapienza'", "Engineering");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getChildrenCount() == 1) {     // User already present in the database
+                        Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+                        startActivity(navigationActivity);
+                    } else {    // new User
+                        Users newUser;
+                        DatabaseAccess dbAccess = new DatabaseAccess();
 
-            dbAccess.InsertUser(newUser);
+                        if (name.equals("") && surname.equals("")) {    // Google & Facebook sign in
+                            Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+                            startActivity(navigationActivity);
+
+                            newUser = new Users(user.getUid(), user.getDisplayName(), "",
+                                    user.getEmail(), "", "", "");
+                        } else {    // email & password sign in
+                            newUser = new Users(user.getUid(), name, surname, user.getEmail(),
+                                    "", "", "");
+                        }
+
+                        dbAccess.InsertUser(newUser);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    //TO BE IMPLEMENTED
+                }
+            });
         } else {
-            Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+            if (name.equals("") && surname.equals("")) {
+                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+            } else { // non funziona il toast...
+                //Toast.makeText(this, "Email already present.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
