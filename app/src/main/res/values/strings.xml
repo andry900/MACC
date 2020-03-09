@@ -23,5 +23,10 @@
     <string name="labEmail">Email:</string>
     <string name="labName">"Name: "</string>
     <string name="labSurname">"Surname: "</string>
+    <string name="labDepartment">"Department: "</string>
     <string name="labPassword">"Password: "</string>
+    <string name="Save">Save</string>
+    <string name="labUniName">Select your University</string>
+    <string name="imagebooksprofile">imageBooksProfile</string>
+    <string name="insert_your_department">Insert your Department</string>
 </resources>
