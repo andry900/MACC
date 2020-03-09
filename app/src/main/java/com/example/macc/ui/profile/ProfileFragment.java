@@ -23,6 +23,10 @@ public class ProfileFragment extends Fragment {
 
         TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
         TextView profile_TextViewSurname = root.findViewById(R.id.profile_TextViewSurname);
+
+        TextView profile_labViewName = root.findViewById(R.id.profile_labName);
+        TextView profile_labViewSurname = root.findViewById(R.id.profile_labSurname);
+
         TextView profile_TextViewEmail = root.findViewById(R.id.profile_TextViewEmail);
         EditText profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
         Button profile_saveButton = root.findViewById(R.id.profile_btnSave);
@@ -38,6 +42,9 @@ public class ProfileFragment extends Fragment {
                     displayName = Objects.requireNonNull(firebaseUser.getDisplayName()).split(" ", 2);
                     profile_TextViewName.setText(displayName[0]);
                     profile_TextViewSurname.setText(displayName[1]);
+                }else{
+                    profile_labViewName.setVisibility(View.INVISIBLE);
+                    profile_labViewSurname.setVisibility(View.INVISIBLE);
                 }
             } else {
                 profile_TextViewName.setText("instance.getInstance().getName()");
