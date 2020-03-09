@@ -10,19 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.example.macc.NavigationActivity;
 import com.example.macc.R;
-import com.example.macc.Users;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
@@ -34,38 +30,36 @@ public class ProfileFragment extends Fragment {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String[] displayName;
 
-        if(firebaseUser != null){
+        if (firebaseUser != null) {
             String provider = firebaseUser.getProviderData().get(1).getProviderId();
 
-            if ( provider.equals("facebook.com") || provider.equals("google.com")){
-                displayName = firebaseUser.getDisplayName().split(" ",2);
-                profile_TextViewName.setText(displayName[0]);
-                profile_TextViewSurname.setText(displayName[1]);
+            if (provider.equals("facebook.com") || provider.equals("google.com")) {
+                if (!Objects.equals(firebaseUser.getDisplayName(), "")) {
+                    displayName = Objects.requireNonNull(firebaseUser.getDisplayName()).split(" ", 2);
+                    profile_TextViewName.setText(displayName[0]);
+                    profile_TextViewSurname.setText(displayName[1]);
+                }
+
                 profile_TextViewEmail.setText(firebaseUser.getEmail());
-            }else{
+            } else {
                 profile_TextViewName.setText("instance.getInstance().getName()");
                 profile_TextViewSurname.setText("instance.getInstance().getSurname()");
                 profile_TextViewEmail.setText("instance.getInstance().getEmail()");
-        }
+            }
         }
 
         //onClick on button Save
-        profile_saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (profile_edDepartment.getText().toString().equals("")){
-                    profile_edDepartment.setError("please enter a department!");
-                }else{
-                    String newHint = profile_edDepartment.getText().toString();
-                    profile_edDepartment.getText().clear();
-                    profile_edDepartment.setHint(newHint);
-                    Intent intent = new Intent(getContext(), NavigationActivity.class);
-                    startActivity(intent);
-                }
+        profile_saveButton.setOnClickListener(v -> {
+            if (profile_edDepartment.getText().toString().equals("")) {
+                profile_edDepartment.setError("please enter a department!");
+            } else {
+                String newHint = profile_edDepartment.getText().toString();
+                profile_edDepartment.getText().clear();
+                profile_edDepartment.setHint(newHint);
+                Intent intent = new Intent(getContext(), NavigationActivity.class);
+                startActivity(intent);
             }
         });
         return root;
     }
-
 }
-
