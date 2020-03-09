@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         } else {    // email & password sign in
                             newUser = new Users(user.getUid(), name, surname, user.getEmail(),
                                     "", "", "");
+                            //Toast.makeText(this, "Sign in successful!.", Toast.LENGTH_SHORT).show();
                         }
 
                         dbAccess.InsertUser(newUser);
