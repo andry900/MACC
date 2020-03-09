@@ -39,13 +39,11 @@ public class ProfileFragment extends Fragment {
                     profile_TextViewName.setText(displayName[0]);
                     profile_TextViewSurname.setText(displayName[1]);
                 }
-
-                profile_TextViewEmail.setText(firebaseUser.getEmail());
             } else {
                 profile_TextViewName.setText("instance.getInstance().getName()");
                 profile_TextViewSurname.setText("instance.getInstance().getSurname()");
-                profile_TextViewEmail.setText("instance.getInstance().getEmail()");
             }
+            profile_TextViewEmail.setText(firebaseUser.getEmail());
         }
 
         //onClick on button Save
