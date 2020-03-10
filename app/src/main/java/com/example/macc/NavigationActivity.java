@@ -3,6 +3,7 @@ package com.example.macc;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -66,6 +73,35 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             loadLoggedUserData(user);
         } else {
             throw new RuntimeException();
+        }
+
+        //For user logged with a Basic login
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String provider = firebaseUser.getProviderData().get(1).getProviderId();
+
+        if (!provider.equals("facebook.com") || !provider.equals("google.com")) {
+            //get reference to the textView on nav_header_main
+            View header = navigationView.getHeaderView(0);
+            TextView name_surname_navHeader = header.findViewById(R.id.nameTextView);
+
+            // access to DB
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            Query query = rootRef.child("users").orderByChild("id").equalTo(firebaseUser.getUid());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String name = snapshot.child("name").getValue(String.class);
+                        String surname = snapshot.child("surname").getValue(String.class);
+                        String name_surname = name + " " + surname;
+                        name_surname_navHeader.setText(name_surname);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d("TAG", "Database: onCancelled");
+                }
+            });
         }
     }
 

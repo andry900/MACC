@@ -1,12 +1,14 @@
 package com.example.macc.ui.profile;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.macc.R;
@@ -65,10 +67,9 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Log.d("TAG", "Database: onCancelled");
                     }
                 });
             } else {
@@ -113,14 +114,13 @@ public class ProfileFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 snapshot.getRef().child("department").setValue(new_department);
-
+                                Toast.makeText(getContext(), "The changes have been applied!", Toast.LENGTH_SHORT).show();
                                 // DA FARE UPDATE UNIVERSITA'
                             }
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            Log.d("TAG", "Database: onCancelled");
                         }
                     });
                 }
