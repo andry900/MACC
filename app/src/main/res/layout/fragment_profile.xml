@@ -133,8 +133,7 @@
         android:background="#C1BABA"
         android:gravity="center"
         android:textColor="#000"
-        android:textSize="15sp"
-        android:hint="@string/insert_your_department" />
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/profile_btnSave"
