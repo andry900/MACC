@@ -22,31 +22,28 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
-        TextView profile_TextViewSurname = root.findViewById(R.id.profile_TextViewSurname);
-
-        TextView profile_labViewName = root.findViewById(R.id.profile_labName);
-        TextView profile_labViewSurname = root.findViewById(R.id.profile_labSurname);
-
-        TextView profile_TextViewEmail = root.findViewById(R.id.profile_TextViewEmail);
-        EditText profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
-        TextView profile_labUniName = root.findViewById(R.id.profile_labUniName);
-        Button profile_saveButton = root.findViewById(R.id.profile_btnSave);
-
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Query query;
 
         if (firebaseUser != null) {
-            String[] displayName;
+            TextView profile_labViewName = root.findViewById(R.id.profile_labName);
+            TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
+
+            TextView profile_labViewSurname = root.findViewById(R.id.profile_labSurname);
+            TextView profile_TextViewSurname = root.findViewById(R.id.profile_TextViewSurname);
+
+            //TextView profile_labUniName = root.findViewById(R.id.profile_labUniName);
+            TextView profile_TextViewEmail = root.findViewById(R.id.profile_TextViewEmail);
+            EditText profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
+
+            Button profile_saveButton = root.findViewById(R.id.profile_btnSave);
+
             String provider = firebaseUser.getProviderData().get(1).getProviderId();
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-            query = rootRef.child("users").orderByChild("id").equalTo(firebaseUser.getUid());
-            query.keepSynced(true);
+            Query query = rootRef.child("users").orderByChild("id").equalTo(firebaseUser.getUid());
 
             if (provider.equals("facebook.com") || provider.equals("google.com")) {
                 if (firebaseUser.getDisplayName() != null && !firebaseUser.getDisplayName().equals("")) {
-                    displayName = firebaseUser.getDisplayName().split(" ", 2);
+                    String[] displayName = firebaseUser.getDisplayName().split(" ", 2);
                     profile_TextViewName.setText(displayName[0]);
                     profile_TextViewSurname.setText(displayName[1]);
                 } else {
@@ -58,11 +55,12 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String university = snapshot.child("university").getValue(String.class);
+                            //String university = snapshot.child("university").getValue(String.class);
                             String department = snapshot.child("department").getValue(String.class);
-                            if(department.equals("")){
+
+                            if (department == null || department.equals("")) {
                                 profile_edDepartment.setHint("Insert your department!");
-                            }else{
+                            } else {
                                 profile_edDepartment.setText(department);
                             }
                         }
@@ -86,9 +84,9 @@ public class ProfileFragment extends Fragment {
                             profile_TextViewName.setText(name);
                             profile_TextViewSurname.setText(surname);
 
-                            if(department.equals("")){
+                            if (department == null || department.equals("")) {
                                 profile_edDepartment.setHint("Insert your department!");
-                            }else{
+                            } else {
                                 profile_edDepartment.setText(department);
                             }
                         }
@@ -108,15 +106,15 @@ public class ProfileFragment extends Fragment {
                 if (profile_edDepartment.getText().toString().equals("")) {
                     profile_edDepartment.setError("Please enter a department!");
                 } else {
+                    String new_department = profile_edDepartment.getText().toString();
+
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String new_department = profile_edDepartment.getText().toString();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                //String university = snapshot.child("university").getValue(String.class);
                                 snapshot.getRef().child("department").setValue(new_department);
 
-                                // DA FARE UPDATE UNIVERSITA' E DIPARTIMENTO
+                                // DA FARE UPDATE UNIVERSITA'
                             }
                         }
 
