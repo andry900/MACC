@@ -25,9 +25,7 @@ import com.example.macc.ui.information.InformationFragment;
 import com.example.macc.ui.profile.ProfileFragment;
 import com.example.macc.ui.reviews.ReviewsFragment;
 import com.facebook.login.LoginManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +39,7 @@ import com.squareup.picasso.Picasso;
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +50,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView = findViewById(R.id.nav_view);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_profile, R.id.nav_reviews,
@@ -66,42 +64,12 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
             loadLoggedUserData(user);
         } else {
             throw new RuntimeException();
-        }
-
-        //For user logged with a Basic login
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        String provider = firebaseUser.getProviderData().get(1).getProviderId();
-
-        if (!provider.equals("facebook.com") || !provider.equals("google.com")) {
-            //get reference to the textView on nav_header_main
-            View header = navigationView.getHeaderView(0);
-            TextView name_surname_navHeader = header.findViewById(R.id.nameTextView);
-
-            // access to DB
-            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-            Query query = rootRef.child("users").orderByChild("id").equalTo(firebaseUser.getUid());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String name = snapshot.child("name").getValue(String.class);
-                        String surname = snapshot.child("surname").getValue(String.class);
-                        String name_surname = name + " " + surname;
-                        name_surname_navHeader.setText(name_surname);
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d("TAG", "Database: onCancelled");
-                }
-            });
         }
     }
 
@@ -119,24 +87,40 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     }
 
     public void loadLoggedUserData(FirebaseUser user) {
-        String name = user.getDisplayName();
-        String email = user.getEmail();;
-        Uri photo = user.getPhotoUrl();
+        String provider = user.getProviderData().get(1).getProviderId();
 
-        NavigationView navigationView =  findViewById(R.id.nav_view);
         View nav_header_main = navigationView.getHeaderView(0);
 
         TextView nameTextView = nav_header_main.findViewById(R.id.nameTextView);
         TextView emailTextView =  nav_header_main.findViewById(R.id.emailTextView);
         ImageView imageView =  nav_header_main.findViewById(R.id.imageView);
 
-        if (name != null) {
-            nameTextView.append(name);
+        if (provider.equals("facebook.com") || provider.equals("google.com")) {
+            nameTextView.setText(user.getDisplayName());
+        } else {
+            // access to DB
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            Query query = rootRef.child("users").orderByChild("id").equalTo(user.getUid());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String name = snapshot.child("name").getValue(String.class);
+                        String surname = snapshot.child("surname").getValue(String.class);
+                        String name_surname = name + " " + surname;
+
+                        nameTextView.setText(name_surname);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d("TAG", "Database: onCancelled");
+                }
+            });
         }
 
-        if (email != null) {
-            emailTextView.append(email);
-        }
+        emailTextView.append(user.getEmail());
+        Uri photo = user.getPhotoUrl();
 
         if (photo == null) {
             imageView.setImageResource(R.mipmap.ic_avatar);
