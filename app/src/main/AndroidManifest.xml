@@ -30,7 +30,7 @@
         <activity android:name=".NavigationActivity" />
         <activity android:name=".PopUpSignIn"
             android:theme="@style/AppTheme.PopUpTheme"/>
-
+        <activity android:name= ".ui.reviews.FillFragmentReview"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8F8">
+    android:background="#F5F8F8"
+    android:id="@+id/fragment_profile">
 
     <ImageView
         android:id="@+id/profile_imageBackground"
@@ -47,6 +49,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labName"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <TextView
@@ -71,6 +74,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labSurname"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <TextView
@@ -95,6 +99,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labEmail"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
 
@@ -120,6 +125,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labDepartment"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <EditText

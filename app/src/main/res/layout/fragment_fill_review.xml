@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8F8"
+    android:id="@+id/fragment_fillReview">
+
+    <TextView
+        android:id="@+id/insertReview_labExam"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/Exam"
+        android:gravity="center"
+        android:fontFamily="@font/amita"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/insertReview_edExam"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/insertReview_labExam"
+        android:background="#CDC5C5"
+        android:inputType="text"
+        android:hint="@string/insert_the_exam"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/insertReview_professor"
+        android:layout_below="@+id/insertReview_labExam"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/Professor"
+        android:gravity="center"
+        android:fontFamily="@font/amita"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/insertReview_edProfessor"
+        android:layout_below="@+id/insertReview_edExam"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/insertReview_professor"
+        android:background="#CDC5C5"
+        android:inputType="text"
+        android:hint="@string/insert_the_professor"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="#000" />
+
+
+    <TextView
+        android:id="@+id/insertReview_mark"
+        android:layout_below="@+id/insertReview_professor"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/Mark"
+        android:gravity="center"
+        android:fontFamily="@font/amita"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/insertReview_edMark"
+        android:layout_below="@+id/insertReview_edProfessor"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/insertReview_mark"
+        android:background="#CDC5C5"
+        android:inputType="number"
+        android:hint="@string/insert_the_mark"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/insertReview_niceness"
+        android:layout_below="@+id/insertReview_mark"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/Niceness"
+        android:gravity="center"
+        android:fontFamily="@font/amita"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/insertReview_edNiceness"
+        android:layout_below="@+id/insertReview_edMark"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/insertReview_niceness"
+        android:background="#CDC5C5"
+        android:inputType="numberDecimal"
+        android:hint="@string/Insert_the_niceness"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="#000" />
+
+
+    <TextView
+        android:id="@+id/insertReview_comment"
+        android:layout_below="@+id/insertReview_niceness"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/Comment"
+        android:gravity="center"
+        android:fontFamily="@font/amita"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/insertReview_edComment"
+        android:layout_below="@+id/insertReview_comment"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="#CDC5C5"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:hint="@string/insert_your_comments"
+        android:gravity="start"
+        android:textSize="15sp"
+        android:textColor="#000" />
+
+    <Button
+        android:id="@+id/insertReview_saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/insertReview_edComment"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:background="@drawable/round_bg"
+        android:backgroundTint="#2196F3"
+        android:text="@string/Save"/>
+
+
+</RelativeLayout>

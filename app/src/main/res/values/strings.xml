@@ -29,4 +29,18 @@
     <string name="labUniName">Select your University</string>
     <string name="imagebooksprofile">imageBooksProfile</string>
     <string name="insert_your_department">Insert your Department</string>
+    <string name="insert_a_new_review">Insert a new review</string>
+    <string name="no_review_inListView">You have no reviews, insert a new one!</string>
+    <string name="Exam">Exam: </string>
+    <string name="Professor">"Professor: "</string>
+    <string name="Mark">"Mark: "</string>
+    <string name="Niceness">"Niceness: "</string>
+    <string name="Comment">"Comment: "</string>
+    <string name="insert_the_exam">Insert the exam</string>
+    <string name="insert_the_professor">Insert the Professor</string>
+    <string name="insert_the_mark">Insert the mark from 18 to 31 (lode)</string>
+    <string name="Insert_the_niceness">Insert the niceness from 1 to 5 (max)</string>
+    <string name="insert_your_comments">Insert your comments</string>
+    <string name="Update">Update</string>
+    <string name="Delete">Delete</string>
 </resources>

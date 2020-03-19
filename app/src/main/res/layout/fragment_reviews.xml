@@ -1,19 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    android:id="@+id/fragment_review"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/text_reviews"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/linearLayoutListView"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/myReviews_listView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:divider="?attr/colorPrimary"
+            android:dividerHeight="2dp"
+            android:visibility="invisible"
+            android:layout_weight="0.7"/>
+
+        <Button
+            android:id="@+id/insertReview_button"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center|bottom"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="#2196F3"
+            android:text="@string/insert_a_new_review" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/no_reviews_textView"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_above="@id/feather_pen_imageView"
+        android:layout_marginBottom="30dp"
+        android:textColor="#000"
+        android:fontFamily="@font/amita"
+        android:textSize="15sp"
+        android:text="@string/no_review_inListView"/>
+
+    <ImageView
+        android:id="@+id/feather_pen_imageView"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_feather_pen"
+        android:layout_marginBottom="20dp"
+        tools:ignore="ContentDescription" />
+
+</RelativeLayout>

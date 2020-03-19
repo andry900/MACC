@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -23,7 +25,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.macc.ui.home.HomeFragment;
 import com.example.macc.ui.information.InformationFragment;
 import com.example.macc.ui.profile.ProfileFragment;
+import com.example.macc.ui.reviews.FillFragmentReview;
 import com.example.macc.ui.reviews.ReviewsFragment;
+import com.example.macc.ui.reviews.ShowFragmentReview;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -131,30 +135,30 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FrameLayout fl = findViewById(R.id.nav_host_fragment);
+        FrameLayout frameLayout = findViewById(R.id.nav_host_fragment);
         switch (item.getItemId()) {
             case R.id.nav_home:
-                fl.removeAllViews();
+                frameLayout.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new HomeFragment()).commit();
+                        new HomeFragment(),"fragment_home").addToBackStack(null).commit();
                 break;
 
             case R.id.nav_profile:
-                fl.removeAllViews();
+                frameLayout.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ProfileFragment()).commit();
+                        new ProfileFragment(),"fragment_profile").addToBackStack(null).commit();
                 break;
 
             case R.id.nav_reviews:
-                fl.removeAllViews();
+                frameLayout.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ReviewsFragment()).commit();
+                        new ReviewsFragment(),"fragment_reviews").addToBackStack(null).commit();
                 break;
 
             case R.id.nav_info:
-                fl.removeAllViews();
+                frameLayout.removeAllViews();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new InformationFragment()).commit();
+                        new InformationFragment(),"fragment_info").addToBackStack(null).commit();
                 break;
 
             case R.id.nav_logout:
@@ -169,4 +173,36 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        if (fragment instanceof ProfileFragment){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+        }
+        if (fragment instanceof ReviewsFragment){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+        }
+        if (fragment instanceof FillFragmentReview){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
+        }
+        if (fragment instanceof ShowFragmentReview){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
+        }
+        if (fragment instanceof InformationFragment){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+        }
+        if (fragment instanceof HomeFragment){
+            //super.onBackPressed(); //if click 2 times it exit and come back to MainActivity
+            this.finish(); //in this way it come back to MainActivity
+        }
+
+    }
+
 }
