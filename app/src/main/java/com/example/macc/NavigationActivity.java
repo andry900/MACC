@@ -1,6 +1,5 @@
 package com.example.macc;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -40,8 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.Objects;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private AppBarConfiguration mAppBarConfiguration;
@@ -181,35 +177,35 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
-        if (fragment instanceof ProfileFragment){
+        if (fragment instanceof ProfileFragment) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
             navigationView.getMenu().getItem(1).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
-        else if (fragment instanceof ReviewsFragment){
+        else if (fragment instanceof ReviewsFragment) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
             navigationView.getMenu().getItem(2).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
-        else if (fragment instanceof FillFragmentReview){
+        else if (fragment instanceof FillFragmentReview) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
         }
-        else if (fragment instanceof ShowFragmentReview){
+        else if (fragment instanceof ShowFragmentReview) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
         }
-        else if (fragment instanceof InformationFragment){
+        else if (fragment instanceof InformationFragment) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
             navigationView.getMenu().getItem(3).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
-        else if (fragment instanceof HomeFragment){
+        else if (fragment instanceof HomeFragment) {
             super.onBackPressed();
-            finish();//in this way it come back to MainActivity
+            finish();   //in this way it come back to MainActivity
         }
         else {
             super.onBackPressed();
@@ -217,6 +213,4 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         }
 
     }
-
-
 }

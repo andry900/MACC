@@ -60,7 +60,6 @@
         android:textSize="15sp"
         android:textColor="#000" />
 
-
     <TextView
         android:id="@+id/showReview_mark"
         android:layout_below="@+id/showReview_professor"
@@ -73,6 +72,7 @@
         android:gravity="center"
         android:fontFamily="@font/amita"
         android:textColor="#000"/>
+
     <SeekBar
         android:id="@+id/seekBar_mark_showReview"
         android:layout_width="160dp"
@@ -80,7 +80,9 @@
         android:layout_below="@+id/showReview_edProfessor"
         android:layout_toEndOf="@+id/showReview_mark"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:progressTint="#FFEB3B"
+        android:progressBackgroundTint="#3F51B5" />
 
     <ImageView
         android:id="@+id/imageView_markShowReview"

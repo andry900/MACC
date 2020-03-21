@@ -4,11 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Patterns;
-import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class PopUpSignIn extends Activity {
     @Override
@@ -53,13 +59,28 @@ public class PopUpSignIn extends Activity {
                     popup_password.setError("Please enter a password of at least 6 characters!");
                 }
             } else {
-                Toast toast = Toast.makeText(this,"you have successfully registered!", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-                finish();
-                mainActivity.SignInBasic(
-                        popup_name.getText().toString(), popup_surname.getText().toString(),
-                        popup_email.getText().toString(), popup_password.getText().toString());
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                Query query = rootRef.child("users").orderByChild("email").equalTo(txtEmail);
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getChildrenCount() == 1) {     // Email already present in the database
+                            popup_email.setError("Email already present!");
+                        } else {    // new email
+                            finish();
+
+                            mainActivity.SignInBasic(
+                                    popup_name.getText().toString(), popup_surname.getText().toString(),
+                                    popup_email.getText().toString(), popup_password.getText().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.w("TAG", "Database error");
+                    }
+                });
             }
         });
 

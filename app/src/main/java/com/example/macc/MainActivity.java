@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     static final int GOOGLE_SIGN_IN = 123;
@@ -134,16 +135,17 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     public void SignInBasic(String name, String surname, String email, String password) {
         mAuth = FirebaseAuth.getInstance();
-        
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(name, surname, user);
+
+                        //CreateToast("You have successfully registered!");
                     } else {
-                        // If sign in fails, display a message to the user.
-                        updateUI(name, surname, null);
+                        // CreateToast("Error in registration!");
                     }
                 });
     }
@@ -231,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         } else {    // email & password sign in
                             newUser = new Users(user.getUid(), name, surname, user.getEmail(),
                                     "", "", "");
-                            //Toast.makeText(this, "Sign in successful!.", Toast.LENGTH_SHORT).show();
                         }
 
                         dbAccess.InsertUser(newUser);
@@ -240,15 +241,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    //TO BE IMPLEMENTED
+                    Log.w("TAG", "Database error");
                 }
             });
         } else {
-            if (name.equals("") && surname.equals("")) {
-                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-            } else { // non funziona il toast...
-                //Toast.makeText(this, "Email already present.", Toast.LENGTH_SHORT).show();
-            }
+            CreateToast("Authentication failed.");
         }
+    }
+
+    public void CreateToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
