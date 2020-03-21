@@ -26,6 +26,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class ReviewsFragment extends Fragment {
@@ -101,6 +102,10 @@ public class ReviewsFragment extends Fragment {
                     }
                     no_review_textView.setVisibility(View.INVISIBLE);
                     featherPen_imageView.setVisibility(View.INVISIBLE);
+
+                    Collections.reverse(exams);
+                    Collections.reverse(marks);
+                    Collections.reverse(niceness_values);
 
                     CustomAdapter adapter = new CustomAdapter((Activity) getContext(),exams,marks,niceness_values);
                     myReview_listView.setAdapter(adapter);
