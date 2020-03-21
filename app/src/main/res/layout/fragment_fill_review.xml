@@ -11,8 +11,8 @@
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
         android:text="@string/Exam"
         android:gravity="center"
         android:fontFamily="@font/amita"
@@ -74,17 +74,37 @@
         android:fontFamily="@font/amita"
         android:textColor="#000"/>
 
-    <EditText
-        android:id="@+id/insertReview_edMark"
+    <SeekBar
+        android:id="@+id/seekBar_mark_fillReview"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/insertReview_edProfessor"
+        android:layout_toEndOf="@+id/insertReview_mark"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:progressTint="#FFEB3B"
+        android:progressBackgroundTint="#3F51B5"/>
+
+    <ImageView
+        android:id="@+id/imageView_markFillReview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/insertReview_edProfessor"
+        android:layout_toEndOf="@+id/seekBar_mark_fillReview"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_check_logo">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/insertReview_txtMark"
         android:layout_below="@+id/insertReview_edProfessor"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_toEndOf="@+id/insertReview_mark"
+        android:layout_toEndOf="@+id/imageView_markFillReview"
         android:background="#CDC5C5"
-        android:inputType="number"
-        android:hint="@string/insert_the_mark"
         android:gravity="center"
         android:textSize="12sp"
         android:textColor="#000" />
@@ -95,28 +115,28 @@
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
         android:text="@string/Niceness"
         android:gravity="center"
         android:fontFamily="@font/amita"
         android:textColor="#000"/>
 
-    <EditText
-        android:id="@+id/insertReview_edNiceness"
-        android:layout_below="@+id/insertReview_edMark"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+    <RatingBar
+        android:id="@+id/ratingBar_fillReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar_mark_fillReview"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
         android:layout_toEndOf="@+id/insertReview_niceness"
-        android:background="#CDC5C5"
-        android:inputType="numberDecimal"
-        android:hint="@string/Insert_the_niceness"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:textColor="#000" />
-
+        android:progressBackgroundTint="#EFEF8D"
+        android:progressTint="#A6A611"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:rating="1"
+        android:numStars="5"
+        android:stepSize="0.5"/>
 
     <TextView
         android:id="@+id/insertReview_comment"
@@ -158,6 +178,5 @@
         android:background="@drawable/round_bg"
         android:backgroundTint="#2196F3"
         android:text="@string/Save"/>
-
 
 </RelativeLayout>

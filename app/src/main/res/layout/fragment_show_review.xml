@@ -73,18 +73,35 @@
         android:gravity="center"
         android:fontFamily="@font/amita"
         android:textColor="#000"/>
+    <SeekBar
+        android:id="@+id/seekBar_mark_showReview"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showReview_edProfessor"
+        android:layout_toEndOf="@+id/showReview_mark"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp" />
 
-    <EditText
-        android:id="@+id/showReview_edMark"
+    <ImageView
+        android:id="@+id/imageView_markShowReview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/showReview_edProfessor"
+        android:layout_toEndOf="@+id/seekBar_mark_showReview"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_check_logo">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/showReview_txtMark"
         android:layout_below="@+id/showReview_edProfessor"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_toEndOf="@+id/showReview_mark"
+        android:layout_toEndOf="@+id/imageView_markShowReview"
         android:background="#CDC5C5"
-        android:inputType="number"
-        android:hint="@string/insert_the_mark"
         android:gravity="center"
         android:textSize="12sp"
         android:textColor="#000" />
@@ -102,21 +119,21 @@
         android:fontFamily="@font/amita"
         android:textColor="#000"/>
 
-    <EditText
-        android:id="@+id/showReview_edNiceness"
-        android:layout_below="@+id/showReview_edMark"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+    <RatingBar
+        android:id="@+id/ratingBar_fillReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar_mark_showReview"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
         android:layout_toEndOf="@+id/showReview_niceness"
-        android:background="#CDC5C5"
-        android:inputType="numberDecimal"
-        android:hint="@string/Insert_the_niceness"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:textColor="#000" />
-
+        android:progressBackgroundTint="#EFEF8D"
+        android:progressTint="#A6A611"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:rating="1"
+        android:numStars="5"
+        android:stepSize="0.5"/>
 
     <TextView
         android:id="@+id/showReview_comment"

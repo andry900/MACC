@@ -21,13 +21,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity"
+            android:noHistory = "true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NavigationActivity" />
+        <activity android:name=".NavigationActivity"
+            android:noHistory = "true"/>
         <activity android:name=".PopUpSignIn"
             android:theme="@style/AppTheme.PopUpTheme"/>
         <activity android:name= ".ui.reviews.FillFragmentReview"/>

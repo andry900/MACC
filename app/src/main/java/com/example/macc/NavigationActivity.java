@@ -1,5 +1,6 @@
 package com.example.macc;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private AppBarConfiguration mAppBarConfiguration;
@@ -174,35 +177,46 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
-
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
         if (fragment instanceof ProfileFragment){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            navigationView.getMenu().getItem(1).setChecked(false);
+            navigationView.getMenu().getItem(0).setChecked(true);
         }
-        if (fragment instanceof ReviewsFragment){
+        else if (fragment instanceof ReviewsFragment){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            navigationView.getMenu().getItem(2).setChecked(false);
+            navigationView.getMenu().getItem(0).setChecked(true);
         }
-        if (fragment instanceof FillFragmentReview){
+        else if (fragment instanceof FillFragmentReview){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
         }
-        if (fragment instanceof ShowFragmentReview){
+        else if (fragment instanceof ShowFragmentReview){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
         }
-        if (fragment instanceof InformationFragment){
+        else if (fragment instanceof InformationFragment){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            navigationView.getMenu().getItem(3).setChecked(false);
+            navigationView.getMenu().getItem(0).setChecked(true);
         }
-        if (fragment instanceof HomeFragment){
-            //super.onBackPressed(); //if click 2 times it exit and come back to MainActivity
-            this.finish(); //in this way it come back to MainActivity
+        else if (fragment instanceof HomeFragment){
+            super.onBackPressed();
+            finish();//in this way it come back to MainActivity
+        }
+        else {
+            super.onBackPressed();
+            finish();
         }
 
     }
+
 
 }

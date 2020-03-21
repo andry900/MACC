@@ -1,12 +1,16 @@
 package com.example.macc.ui.reviews;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,18 +29,45 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ShowFragmentReview extends Fragment {
 
+    int progress;
+    @SuppressLint("NewApi")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_show_review, container, false);
         EditText showReview_edExam = root.findViewById(R.id.showReview_edExam);
         EditText showReview_edProfessor = root.findViewById(R.id.showReview_edProfessor);
-        EditText showReview_edMark = root.findViewById(R.id.showReview_edMark);
-        EditText showReview_edNiceness = root.findViewById(R.id.showReview_edNiceness);
         EditText showReview_edComment = root.findViewById(R.id.showReview_edComment);
+        TextView showReview_txtMark = root.findViewById(R.id.showReview_txtMark);
+
         Button showReview_updateButton = root.findViewById(R.id.showReview_updateButton);
         Button showReview_deleteButton = root.findViewById(R.id.showReview_deleteButton);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        RatingBar ratingBar_niceness = root.findViewById(R.id.ratingBar_fillReview);
+        ratingBar_niceness.setProgress(1);
+        ratingBar_niceness.setRating(1.0f);
+
+        SeekBar seekBar_mark = root.findViewById(R.id.seekBar_mark_showReview);
+        seekBar_mark.setMax(31);
+        seekBar_mark.setMin(18);
+
+        seekBar_mark.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                showReview_txtMark.setText("" + String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //not important
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //not important
+            }
+        });
 
         Bundle bundle = getArguments();
         String exam_item_selected = bundle.getString("exam_item_selected");
@@ -57,10 +88,12 @@ public class ShowFragmentReview extends Fragment {
                             showReview_edProfessor.setText(professor);
 
                             String mark = snapshot.child("mark").getValue().toString();
-                            showReview_edMark.setText(mark);
+                            progress = Integer.parseInt(mark);
+                            seekBar_mark.setProgress(progress);
+                            showReview_txtMark.setText(mark);
 
                             String niceness = snapshot.child("niceness").getValue().toString();
-                            showReview_edNiceness.setText(niceness);
+                            ratingBar_niceness.setRating(Float.parseFloat(niceness));
 
                             String comment = snapshot.child("comment").getValue().toString();
                             showReview_edComment.setText(comment);
@@ -83,29 +116,12 @@ public class ShowFragmentReview extends Fragment {
                     showReview_edExam.setError("Please enter an exam!");
                 if (showReview_edProfessor.getText().toString().equals(""))
                     showReview_edProfessor.setError("Please enter a Professor!");
-                if (showReview_edMark.getText().toString().equals(""))
-                    showReview_edMark.setError("Please enter a mark!");
-                if (!showReview_edMark.getText().toString().equals("")){
-                    int value = Integer.parseInt(showReview_edMark.getText().toString());
-                    if( value < 18 || value > 31){
-                        showReview_edMark.setError("Please enter a value between 18 and 31");
-                    }
-                }
-                if(showReview_edNiceness.getText().toString().equals(""))
-                    showReview_edNiceness.setError("Please enter a niceness value!");
-                if (!showReview_edNiceness.getText().toString().equals("")){
-                    Float value = Float.parseFloat(showReview_edNiceness.getText().toString());
-                    if( value < 1 || value > 5){
-                        showReview_edNiceness.setError("Please enter a value between 1 and 5");
-                    }
-                }
                 if(showReview_edComment.getText().toString().equals(""))
                     showReview_edComment.setError("Please enter a comment!");
 
                 //CHECKING THAT NO ERROR HAS BEEN SHOWED BEFORE UPDATE VALUES INTO DATABASE
-                if ( showReview_edExam.getError() == null  &&  showReview_edProfessor.getError() == null  &&
-                        showReview_edMark.getError() == null  && showReview_edNiceness.getError() == null  &&
-                        showReview_edComment.getError() == null ){
+                if ( showReview_edExam.getError() == null  &&  showReview_edProfessor.getError() == null
+                        && showReview_edComment.getError() == null ){
 
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -127,15 +143,20 @@ public class ShowFragmentReview extends Fragment {
                                             String professor = showReview_edProfessor.getText().toString();
                                             snapshot.getRef().child("professor").setValue(professor);
 
-                                            String mark = showReview_edMark.getText().toString();
+                                            String mark = showReview_txtMark.getText().toString();
                                             snapshot.getRef().child("mark").setValue(mark);
 
-                                            String niceness = showReview_edNiceness.getText().toString();
+                                            String niceness = String.valueOf(ratingBar_niceness.getRating());
                                             snapshot.getRef().child("niceness").setValue(niceness);
 
                                             String comment = showReview_edComment.getText().toString();
                                             snapshot.getRef().child("comment").setValue(comment);
-                                            Toast.makeText(getContext(),"Your review has been updated!", Toast.LENGTH_SHORT).show();
+                                            Toast toast = Toast.makeText(getContext(),"Your review has been updated!", Toast.LENGTH_SHORT);
+                                            toast.setGravity(Gravity.CENTER, 0, 0);
+                                            toast.show();
+
+                                            getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                                    new ReviewsFragment(),"fragment_reviews").commit();
                                         }
                                     }
                                 }
@@ -163,7 +184,13 @@ public class ShowFragmentReview extends Fragment {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 if(snapshot.child("exam").getValue().toString().equals(exam_item_selected)){
                                     snapshot.getRef().removeValue();
-                                    Toast.makeText(getContext(),"Your review has been deleted!", Toast.LENGTH_SHORT).show();
+
+                                    Toast toast = Toast.makeText(getContext(),"Your review has been deleted!", Toast.LENGTH_SHORT);
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+
+                                    getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                            new ReviewsFragment(),"fragment_reviews").commit();
                                 }
                             }
                         }

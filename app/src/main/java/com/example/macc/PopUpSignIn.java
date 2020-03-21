@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class PopUpSignIn extends Activity {
     @Override
@@ -51,6 +53,9 @@ public class PopUpSignIn extends Activity {
                     popup_password.setError("Please enter a password of at least 6 characters!");
                 }
             } else {
+                Toast toast = Toast.makeText(this,"you have successfully registered!", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
                 finish();
                 mainActivity.SignInBasic(
                         popup_name.getText().toString(), popup_surname.getText().toString(),
