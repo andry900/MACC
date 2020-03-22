@@ -3,18 +3,38 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.macc">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:icon="@mipmap/ic_icon_app"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustPan"
+        android:screenOrientation="portrait" >
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_application_id"/>
-        <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_application_id"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name">
+        </activity>
+
         <activity android:name="com.facebook.CustomTabActivity" android:exported="true">
-            <intent-filter> <action android:name="android.intent.action.VIEW" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
@@ -22,19 +42,24 @@
         </activity>
 
         <activity android:name=".MainActivity"
-            android:noHistory = "true">
+            android:noHistory = "true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".NavigationActivity"
-            android:noHistory = "true"/>
+            android:noHistory = "true"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name=".PopUpSignIn"
-            android:theme="@style/AppTheme.PopUpTheme"/>
-        <activity android:name= ".ui.reviews.FillFragmentReview"/>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:theme="@style/AppTheme.PopUpTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name= ".ui.reviews.FillFragmentReview"
+            android:windowSoftInputMode="adjustPan" />
+
     </application>
 </manifest>

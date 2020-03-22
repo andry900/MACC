@@ -36,7 +36,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     static final int GOOGLE_SIGN_IN = 123;
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.w("TAG", "Database error");
+                    Log.d("TAG", "Database: onCancelled");
                 }
             });
         } else {

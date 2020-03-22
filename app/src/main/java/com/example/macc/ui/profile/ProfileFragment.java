@@ -1,5 +1,7 @@
 package com.example.macc.ui.profile;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,13 +10,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.example.macc.HerokuService;
 import com.example.macc.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -35,9 +44,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements OnMapReadyCallback {
+    private View root;
+    private AutoCompleteTextView university_name;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_profile, container, false);
+        root = inflater.inflate(R.layout.fragment_profile, container, false);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
@@ -46,7 +58,7 @@ public class ProfileFragment extends Fragment {
                     .build();
 
             HerokuService service = retrofit.create(HerokuService.class);
-            AutoCompleteTextView university_name = root.findViewById(R.id.profile_UniName);
+            university_name = root.findViewById(R.id.profile_UniName);
 
             Call<ResponseBody> call = service.getRequest();
             call.enqueue(new Callback<ResponseBody>() {
@@ -62,22 +74,41 @@ public class ProfileFragment extends Fragment {
                             universities.add(jsonObject.getString("name"));
                         }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<> (Objects.requireNonNull(getActivity()),
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
                                 android.R.layout.simple_list_item_1, universities);
 
                         university_name.setAdapter(adapter);
 
                     } catch (IOException | JSONException e) {
-                        e.printStackTrace();
                         university_name.setText(e.getMessage());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> _, Throwable t) {
-                    t.printStackTrace();
+                    Log.d("TAG", "Callback: onFailure");
                 }
             });
+
+            AutoCompleteTextView profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
+
+            String[] departments = new String[]{
+                    "Agriculture", "Architecture", "Architecture", "Design", "Cultural Heritage",
+                    "Veterinary Medicine", "Statistical Sciences", "Economy", "Biotechnology",
+                    "Pharmacy", "Philosophy", "Motor Sciences", "Law", "Aerospace Engineering",
+                    "Biomedical Engineering", "Civil Engineering", "Chemical Engineering",
+                    "Telecommunication Engineering", "Computer Engineering", "Mechanical Engineering",
+                    "Management Engineering", "Physical Engineering", "DAMS", "Letters",
+                    "Communication Sciences", "History", "Foreign Languages and Literatures",
+                    "Nursing", "Medicine and Surgery", "Psychology", "Education Sciences",
+                    "Mathematical, Physical and Natural Sciences", "International and Diplomatic Sciences"
+                    , "Political, Social and International Sciences", "Sociology"
+            };
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                    android.R.layout.simple_list_item_1, departments);
+
+            profile_edDepartment.setAdapter(adapter);
 
             TextView profile_labViewName = root.findViewById(R.id.profile_labName);
             TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
@@ -86,7 +117,6 @@ public class ProfileFragment extends Fragment {
             TextView profile_TextViewSurname = root.findViewById(R.id.profile_TextViewSurname);
 
             TextView profile_TextViewEmail = root.findViewById(R.id.profile_TextViewEmail);
-            EditText profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
 
             Button profile_saveButton = root.findViewById(R.id.profile_btnSave);
 
@@ -122,8 +152,11 @@ public class ProfileFragment extends Fragment {
                             } else {
                                 profile_edDepartment.setText(department);
                             }
+
+                            LoadMap();
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.d("TAG", "Database: onCancelled");
@@ -153,6 +186,8 @@ public class ProfileFragment extends Fragment {
                             } else {
                                 profile_edDepartment.setText(department);
                             }
+
+                            LoadMap();
                         }
                     }
 
@@ -186,9 +221,12 @@ public class ProfileFragment extends Fragment {
                                 snapshot.getRef().child("university").setValue(new_university);
                                 snapshot.getRef().child("department").setValue(new_department);
 
+                                ReloadFragment();
+
                                 Toast.makeText(getContext(), "The changes have been applied!", Toast.LENGTH_SHORT).show();
                             }
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             Log.d("TAG", "Database: onCancelled");
@@ -198,5 +236,42 @@ public class ProfileFragment extends Fragment {
             });
         }
         return root;
+    }
+
+    private void LoadMap() {
+        MapView mapView = root.findViewById(R.id.map);
+
+        if (mapView != null) {
+            mapView.onCreate(null);
+            mapView.onResume();
+            mapView.getMapAsync(this);
+        }
+    }
+
+    private void ReloadFragment() {
+        Fragment newFragment = new ProfileFragment();
+        FragmentTransaction ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.fragment_profile, newFragment).commit();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        List<Address> addresses;
+        Geocoder geocoder = new Geocoder(getContext());
+
+        try {
+            addresses = geocoder.getFromLocationName(university_name.getText().toString(), 1);
+            if (addresses.size() > 0) {
+                double latitude = addresses.get(0).getLatitude();
+                double longitude = addresses.get(0).getLongitude();
+
+                LatLng latLng = new LatLng(latitude, longitude);
+
+                googleMap.addMarker(new MarkerOptions().position(latLng).title("University"));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+            }
+        } catch (IOException e) {
+            Log.d("TAG", "Google Maps: onMapReady");
+        }
     }
 }

@@ -10,10 +10,10 @@
     <ImageView
         android:id="@+id/profile_imageBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@mipmap/ic_books_profile"
-        android:layout_marginTop="40dp"
+        android:background="@mipmap/ic_books_profile"
+        android:layout_margin="20dp"
         android:contentDescription="@string/imagebooksprofile" />
 
     <ImageButton
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:background="@null"
         app:srcCompat="@mipmap/ic_university" />
 
@@ -43,13 +43,49 @@
         android:textColorHint="#000"
         android:textColor="#000" />
 
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/profile_imageBackground"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <TextView
+        android:id="@+id/profile_labDepartment"
+        android:layout_width="95dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/map"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="27.5dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:text="@string/labDepartment"
+        android:fontFamily="@font/amita"
+        android:textColor="#000" />
+
+    <AutoCompleteTextView
+        android:id="@+id/profile_edDepartment"
+        android:layout_width="260dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/map"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/profile_labDepartment"
+        android:completionThreshold="1"
+        android:background="#C1BABA"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="15sp" />
+
     <TextView
         android:id="@+id/profile_labName"
         android:layout_width="95dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/profile_imageBackground"
+        android:layout_height="25dp"
+        android:layout_below="@+id/profile_edDepartment"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="27.5dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labName"
@@ -59,9 +95,9 @@
     <TextView
         android:id="@+id/profile_TextViewName"
         android:layout_width="260dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/profile_imageBackground"
-        android:layout_marginTop="40dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/profile_edDepartment"
+        android:layout_marginTop="27dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/profile_labName"
         android:textColor="#000"
@@ -71,10 +107,10 @@
     <TextView
         android:id="@+id/profile_labSurname"
         android:layout_width="95dp"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/profile_labName"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="27.5dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labSurname"
@@ -84,9 +120,9 @@
     <TextView
         android:id="@+id/profile_TextViewSurname"
         android:layout_width="260dp"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/profile_TextViewName"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="27dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/profile_labSurname"
         android:textColor="#000"
@@ -96,51 +132,24 @@
     <TextView
         android:id="@+id/profile_labEmail"
         android:layout_width="95dp"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/profile_labSurname"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="27.5dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labEmail"
         android:fontFamily="@font/amita"
         android:textColor="#000" />
 
-
     <TextView
         android:id="@+id/profile_TextViewEmail"
         android:layout_width="260dp"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/profile_TextViewSurname"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="27dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/profile_labEmail"
-        android:gravity="center"
-        android:textColor="#000"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/profile_labDepartment"
-        android:layout_width="95dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/profile_labEmail"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        android:text="@string/labDepartment"
-        android:fontFamily="@font/amita"
-        android:textColor="#000" />
-
-    <EditText
-        android:id="@+id/profile_edDepartment"
-        android:layout_width="260dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/profile_labEmail"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_toEndOf="@+id/profile_labDepartment"
-        android:background="#C1BABA"
         android:gravity="center"
         android:textColor="#000"
         android:textSize="15sp" />
@@ -149,9 +158,9 @@
         android:id="@+id/profile_btnSave"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_edDepartment"
+        android:layout_below="@+id/profile_TextViewEmail"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/round_bg"
         android:backgroundTint="#FF9800"
         android:text="@string/Save"
