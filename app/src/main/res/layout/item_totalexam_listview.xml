@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/image_itemListView_totalExam"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@mipmap/ic_exam" />
+
+        <TextView
+            android:id="@+id/textView_itemListView_totalExam"
+            android:layout_width="260dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/image_itemListView_totalExam"
+            android:background="#F1F4F6"
+            android:gravity="center"
+            android:fontFamily="@font/amita"
+            android:textColor="#000" />
+
+        <ImageView
+            android:id="@+id/image_arrow_totalExam"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toEndOf="@+id/textView_itemListView_totalExam"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            app:srcCompat="@drawable/ic_arrow" />
+
+    </RelativeLayout>
+</LinearLayout>

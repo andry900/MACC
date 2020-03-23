@@ -1,5 +1,6 @@
 package com.example.macc.ui.reviews;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -34,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 public class FillFragmentReview extends Fragment {
 
     int progress_mark = 18;
+    @SuppressLint("NewApi")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -54,6 +56,13 @@ public class FillFragmentReview extends Fragment {
 
         ratingBar_niceness.setProgress(1);
         ratingBar_niceness.setRating(1.0f);
+        ratingBar_niceness.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (ratingBar_niceness.getRating() < 1)
+                    ratingBar_niceness.setRating(1.0f);
+            }
+        });
 
         seekBar_mark.setMax(31);
         seekBar_mark.setMin(progress_mark);

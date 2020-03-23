@@ -1,6 +1,7 @@
 package com.example.macc.ui.reviews;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -9,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.macc.NavigationActivity;
 import com.example.macc.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -79,50 +81,80 @@ public class ReviewsFragment extends Fragment {
 
         ListView myReview_listView = root.findViewById(R.id.myReviews_listView);
         TextView no_review_textView = root.findViewById(R.id.no_reviews_textView);
-        ImageView featherPen_imageView = root.findViewById(R.id.feather_pen_imageView);
+        ImageView featherPen_imageView = root.findViewById(R.id.fillProfileSection_imageView);
+        Button insertReview_button = root.findViewById(R.id.insertReview_button);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("reviews");
-        Query query = rootRef.orderByChild("idUser").equalTo(firebaseUser.getUid());
+        DatabaseReference rootRefReviews = FirebaseDatabase.getInstance().getReference("reviews");
+        DatabaseReference rootRefUsers = FirebaseDatabase.getInstance().getReference("users");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query_users = rootRefUsers.orderByChild("id").equalTo(firebaseUser.getUid());
+        Query query_reviews = rootRefReviews.orderByChild("idUser").equalTo(firebaseUser.getUid());
+
+        query_users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> exams = new ArrayList<String>();
-                ArrayList<String> marks = new ArrayList<String>();
-                ArrayList<String> niceness_values = new ArrayList<String>();
+                if (dataSnapshot.getChildrenCount() != 0) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (!snapshot.child("department").getValue().equals("") && !snapshot.child("university").getValue().equals("")){
+                            query_reviews.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    ArrayList<String> exams = new ArrayList<String>();
+                                    ArrayList<String> marks = new ArrayList<String>();
+                                    ArrayList<String> niceness_values = new ArrayList<String>();
 
-                if (dataSnapshot.getChildrenCount() != 0){
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        if (snapshot.child("exam").exists() && snapshot.child("mark").exists() && snapshot.child("niceness").exists()){
-                            exams.add(snapshot.child("exam").getValue().toString());
-                            marks.add(snapshot.child("mark").getValue().toString());
-                            niceness_values.add(snapshot.child("niceness").getValue().toString());
+                                    if (dataSnapshot.getChildrenCount() != 0) {
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            if (snapshot.child("exam").exists() && snapshot.child("mark").exists() && snapshot.child("niceness").exists()) {
+                                                exams.add(snapshot.child("exam").getValue().toString());
+                                                marks.add(snapshot.child("mark").getValue().toString());
+                                                niceness_values.add(snapshot.child("niceness").getValue().toString());
+                                            }
+                                        }
+                                        no_review_textView.setVisibility(View.INVISIBLE);
+                                        featherPen_imageView.setVisibility(View.INVISIBLE);
+
+                                        Collections.reverse(exams);
+                                        Collections.reverse(marks);
+                                        Collections.reverse(niceness_values);
+
+                                        CustomAdapter adapter = new CustomAdapter((Activity) getContext(), exams, marks, niceness_values);
+                                        myReview_listView.setAdapter(adapter);
+                                        myReview_listView.setVisibility(View.VISIBLE);
+                                        insertReview_button.setVisibility(View.VISIBLE);
+                                    } else {
+                                        myReview_listView.setVisibility(View.INVISIBLE);
+                                        no_review_textView.setText(R.string.no_review_inListView);
+                                        no_review_textView.setVisibility(View.VISIBLE);
+                                        featherPen_imageView.setImageResource(R.mipmap.ic_feather_pen);
+                                        featherPen_imageView.setVisibility(View.VISIBLE);
+                                        insertReview_button.setVisibility(View.VISIBLE);
+                                    }
+
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.d("TAG", "Database: onCancelled");
+                                }
+                            });
+                        }else {
+                            myReview_listView.setVisibility(View.INVISIBLE);
+                            no_review_textView.setText(R.string.no_profile_section_set);
+                            no_review_textView.setVisibility(View.VISIBLE);
+                            featherPen_imageView.setImageResource(R.mipmap.ic_fill_profilesection);
+                            featherPen_imageView.setVisibility(View.VISIBLE);
+                            insertReview_button.setVisibility(View.INVISIBLE);
                         }
                     }
-                    no_review_textView.setVisibility(View.INVISIBLE);
-                    featherPen_imageView.setVisibility(View.INVISIBLE);
-
-                    Collections.reverse(exams);
-                    Collections.reverse(marks);
-                    Collections.reverse(niceness_values);
-
-                    CustomAdapter adapter = new CustomAdapter((Activity) getContext(),exams,marks,niceness_values);
-                    myReview_listView.setAdapter(adapter);
-                    myReview_listView.setVisibility(View.VISIBLE);
-                }else{
-                    myReview_listView.setVisibility(View.INVISIBLE);
-                    no_review_textView.setVisibility(View.VISIBLE);
-                    featherPen_imageView.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("TAG", "Database: onCancelled");
             }
         });
-
     }
-
 
 }

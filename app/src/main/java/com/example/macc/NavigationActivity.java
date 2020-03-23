@@ -3,6 +3,7 @@ package com.example.macc;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.macc.ui.home.HomeFragment;
+import com.example.macc.ui.home.ShowFragmentHome;
 import com.example.macc.ui.information.InformationFragment;
 import com.example.macc.ui.profile.ProfileFragment;
 import com.example.macc.ui.reviews.FillFragmentReview;
@@ -43,12 +47,17 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,6 +75,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -204,13 +214,23 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         else if (fragment instanceof HomeFragment) {
-            super.onBackPressed();
-            finish();   //in this way it come back to MainActivity
+            if(doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                finish();
+            }else {
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Please click BACK again to exit!", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 1500);
+            }
         }
-        else {
-            super.onBackPressed();
-            finish();
+        else if (fragment instanceof ShowFragmentHome) {
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
         }
-
     }
 }

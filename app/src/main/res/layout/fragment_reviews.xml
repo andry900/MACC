@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayoutListView"
+        android:id="@+id/linearLayoutListViewHome"
         android:orientation="vertical">
 
         <ListView
@@ -31,7 +31,8 @@
             android:layout_gravity="center|bottom"
             android:background="@drawable/round_bg"
             android:backgroundTint="#2196F3"
-            android:text="@string/insert_a_new_review" />
+            android:text="@string/insert_a_new_review"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 
@@ -42,15 +43,17 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_above="@id/feather_pen_imageView"
+        android:layout_above="@id/fillProfileSection_imageView"
         android:layout_marginBottom="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:textColor="#000"
         android:fontFamily="@font/amita"
         android:textSize="15sp"
         android:text="@string/no_review_inListView"/>
 
     <ImageView
-        android:id="@+id/feather_pen_imageView"
+        android:id="@+id/fillProfileSection_imageView"
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

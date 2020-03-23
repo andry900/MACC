@@ -47,6 +47,13 @@ public class ShowFragmentReview extends Fragment {
         RatingBar ratingBar_niceness = root.findViewById(R.id.ratingBar_fillReview);
         ratingBar_niceness.setProgress(1);
         ratingBar_niceness.setRating(1.0f);
+        ratingBar_niceness.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (ratingBar_niceness.getRating() < 1)
+                    ratingBar_niceness.setRating(1.0f);
+            }
+        });
 
         SeekBar seekBar_mark = root.findViewById(R.id.seekBar_mark_showReview);
         seekBar_mark.setMax(31);
@@ -55,7 +62,7 @@ public class ShowFragmentReview extends Fragment {
         seekBar_mark.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                showReview_txtMark.setText("" + String.valueOf(progress));
+                showReview_txtMark.setText(String.valueOf(progress));
             }
 
             @Override
@@ -222,3 +229,4 @@ public class ShowFragmentReview extends Fragment {
     }
 
 }
+

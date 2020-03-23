@@ -19,7 +19,7 @@
             app:srcCompat="@mipmap/ic_review" />
 
         <TextView
-            android:id="@+id/textView_itemListView_exam"
+            android:id="@+id/textView_itemListView_review"
             android:layout_width="260dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
@@ -31,57 +31,57 @@
             android:textColor="#000" />
 
         <ImageView
-            android:id="@+id/image_arrow"
+            android:id="@+id/image_arrow_review"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_toEndOf="@+id/textView_itemListView_exam"
+            android:layout_toEndOf="@+id/textView_itemListView_review"
             android:layout_marginStart="10dp"
             android:layout_marginTop="50dp"
             app:srcCompat="@drawable/ic_arrow" />
 
         <ImageView
-            android:id="@+id/image_itemListView_mark"
+            android:id="@+id/image_itemListView_mark_review"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_exam"
+            android:layout_below="@+id/textView_itemListView_review"
             android:layout_marginStart="85dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             app:srcCompat="@drawable/ic_check_logo" />
 
         <TextView
-            android:id="@+id/textView_itemListView_mark"
+            android:id="@+id/textView_itemListView_mark_review"
             android:layout_width="70dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_exam"
+            android:layout_below="@+id/textView_itemListView_review"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/image_itemListView_mark"
+            android:layout_toEndOf="@+id/image_itemListView_mark_review"
             android:background="#CAEDA1"
             android:gravity="center"
             android:textColor="#000" />
 
         <ImageView
-            android:id="@+id/image_itemListView_star"
+            android:id="@+id/image_itemListView_star_review"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_exam"
+            android:layout_below="@+id/textView_itemListView_review"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/textView_itemListView_mark"
+            android:layout_toEndOf="@+id/textView_itemListView_mark_review"
             app:srcCompat="@drawable/ic_star_logo" />
 
         <TextView
-            android:id="@+id/textView_itemListView_niceness"
+            android:id="@+id/textView_itemListView_niceness_review"
             android:layout_width="70dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_exam"
+            android:layout_below="@+id/textView_itemListView_review"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/image_itemListView_star"
+            android:layout_toEndOf="@+id/image_itemListView_star_review"
             android:background="#E4DEA1"
             android:gravity="center"
             android:textColor="#000" />

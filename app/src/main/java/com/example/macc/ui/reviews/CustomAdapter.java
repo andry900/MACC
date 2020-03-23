@@ -30,9 +30,9 @@ public class CustomAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.item_myreview_listview,null,true);
 
-        TextView exam = rowView.findViewById(R.id.textView_itemListView_exam);
-        TextView mark = rowView.findViewById(R.id.textView_itemListView_mark);
-        TextView niceness = rowView.findViewById(R.id.textView_itemListView_niceness);
+        TextView exam = rowView.findViewById(R.id.textView_itemListView_review);
+        TextView mark = rowView.findViewById(R.id.textView_itemListView_mark_review);
+        TextView niceness = rowView.findViewById(R.id.textView_itemListView_niceness_review);
 
         exam.setText(exams.get(position));
         mark.setText(marks.get(position));
