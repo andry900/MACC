@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import com.example.macc.HerokuService;
 import com.example.macc.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -249,9 +248,11 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void ReloadFragment() {
-        Fragment newFragment = new ProfileFragment();
-        FragmentTransaction ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fragment_profile, newFragment).commit();
+        Objects.requireNonNull(getActivity())
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, new ProfileFragment())
+                .commit();
     }
 
     @Override

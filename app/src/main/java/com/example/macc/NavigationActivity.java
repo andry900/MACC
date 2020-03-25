@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,7 +74,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -148,26 +146,38 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         switch (item.getItemId()) {
             case R.id.nav_home:
                 frameLayout.removeAllViews();
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new HomeFragment(),"fragment_home").addToBackStack(null).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
+                        .addToBackStack(null)
+                        .commit();
                 break;
 
             case R.id.nav_profile:
                 frameLayout.removeAllViews();
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ProfileFragment(),"fragment_profile").addToBackStack(null).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment, new ProfileFragment(),"fragment_profile")
+                        .addToBackStack(null)
+                        .commit();
                 break;
 
             case R.id.nav_reviews:
                 frameLayout.removeAllViews();
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ReviewsFragment(),"fragment_reviews").addToBackStack(null).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment, new ReviewsFragment(),"fragment_reviews")
+                        .addToBackStack(null)
+                        .commit();
                 break;
 
             case R.id.nav_info:
                 frameLayout.removeAllViews();
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new InformationFragment(),"fragment_info").addToBackStack(null).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment, new InformationFragment(),"fragment_info")
+                        .addToBackStack(null)
+                        .commit();
                 break;
 
             case R.id.nav_logout:
@@ -188,36 +198,49 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
         if (fragment instanceof ProfileFragment) {
-            getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
+                    .commit();
+
             navigationView.getMenu().getItem(1).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         else if (fragment instanceof ReviewsFragment) {
-            getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
+                    .commit();
+
             navigationView.getMenu().getItem(2).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         else if (fragment instanceof FillFragmentReview) {
-            getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, new ReviewsFragment(),"fragment_reviews")
+                    .commit();
         }
         else if (fragment instanceof ShowFragmentReview) {
-            getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment,new ReviewsFragment(),"fragment_reviews").commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, new ReviewsFragment(),"fragment_reviews")
+                    .commit();
         }
         else if (fragment instanceof InformationFragment) {
-            getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
+                    .commit();
+
             navigationView.getMenu().getItem(3).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         else if (fragment instanceof HomeFragment) {
-            if(doubleBackToExitPressedOnce) {
+            if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 finish();
-            }else {
+            } else {
                 doubleBackToExitPressedOnce = true;
                 Toast.makeText(this, "Please click BACK again to exit!", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
@@ -229,8 +252,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             }
         }
         else if (fragment instanceof ShowFragmentHome) {
-            getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
+                    .commit();
         }
     }
 }

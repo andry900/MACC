@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.example.macc.R;
-
 import java.util.ArrayList;
 
 public class CustomAdapter extends ArrayAdapter<String> {
@@ -18,7 +16,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
     private final ArrayList<String> marks;
     private final ArrayList<String> niceness_values;
 
-    public CustomAdapter(Activity context, ArrayList<String> exams, ArrayList<String> marks, ArrayList<String> niceness_values){
+    CustomAdapter(Activity context, ArrayList<String> exams, ArrayList<String> marks, ArrayList<String> niceness_values){
         super(context, R.layout.item_myreview_listview,exams);
         this.context = context;
         this.exams = exams;
@@ -40,5 +38,4 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
         return rowView;
     }
-
 }
