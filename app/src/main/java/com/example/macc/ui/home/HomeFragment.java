@@ -64,17 +64,26 @@ public class HomeFragment extends Fragment {
                                     ArrayList<String> exams = new ArrayList<String>();
                                     if(dataSnapshot.exists()){
                                         for (DataSnapshot snapshot_review : dataSnapshot.getChildren()) {
-                                            // se uni e dip di utente sono uguali a quelle della recensione corrente
-                                            if (!exams.contains(snapshot_review.child("exam").getValue().toString())) {
-                                                exams.add(snapshot_review.child("exam").getValue().toString());
+                                            if(snapshot_review.child("university").getValue().equals(university) &&
+                                                    snapshot_review.child("department").getValue().equals(department)) {
+                                                if (!exams.contains(snapshot_review.child("exam").getValue().toString())) {
+                                                    exams.add(snapshot_review.child("exam").getValue().toString());
+                                                }
                                             }
                                         }
                                         CustomAdapterHome adapter = new CustomAdapterHome((Activity) getContext(), exams);
                                         totalExams_listView.setAdapter(adapter);
-                                        no_exams_textView.setVisibility(View.INVISIBLE);
-                                        fillProfileSection_imageView.setVisibility(View.INVISIBLE);
-                                        totalExams_listView.setVisibility(View.VISIBLE);
-
+                                        if (totalExams_listView.getAdapter().getCount()!= 0){
+                                            no_exams_textView.setVisibility(View.INVISIBLE);
+                                            fillProfileSection_imageView.setVisibility(View.INVISIBLE);
+                                            totalExams_listView.setVisibility(View.VISIBLE);
+                                        }else{
+                                            totalExams_listView.setVisibility(View.INVISIBLE);
+                                            no_exams_textView.setText(R.string.no_review_has_been_found);
+                                            no_exams_textView.setVisibility(View.VISIBLE);
+                                            fillProfileSection_imageView.setImageResource(R.mipmap.ic_noreview_intotal);
+                                            fillProfileSection_imageView.setVisibility(View.VISIBLE);
+                                        }
                                     }else{
                                         totalExams_listView.setVisibility(View.INVISIBLE);
                                         no_exams_textView.setText(R.string.no_review_has_been_found);

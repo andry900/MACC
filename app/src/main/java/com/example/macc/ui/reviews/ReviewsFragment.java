@@ -33,6 +33,8 @@ import java.util.Collections;
 
 public class ReviewsFragment extends Fragment {
 
+    private String current_university;
+    private String current_department;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -67,8 +69,11 @@ public class ReviewsFragment extends Fragment {
         insertReview_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FillFragmentReview fillFragmentReview = new FillFragmentReview();
+                fillFragmentReview.setUniversity(current_university);
+                fillFragmentReview.setDepartment(current_department);
                 getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new FillFragmentReview(),"fragment_fillReview").commit();
+                        fillFragmentReview,"fragment_fillReview").commit();
 
             }
         });
@@ -96,7 +101,11 @@ public class ReviewsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() != 0) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        if (!snapshot.child("department").getValue().equals("") && !snapshot.child("university").getValue().equals("")){
+                        String department = snapshot.child("department").getValue().toString();
+                        String university = snapshot.child("university").getValue().toString();
+                        if (!department.equals("") && !university.equals("")){
+                            current_university = university;
+                            current_department = department;
                             query_reviews.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

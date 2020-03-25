@@ -35,6 +35,11 @@ import com.google.firebase.database.ValueEventListener;
 public class FillFragmentReview extends Fragment {
 
     int progress_mark = 18;
+    private String university;
+    private String department;
+
+    public FillFragmentReview(){} //default constructor
+
     @SuppressLint("NewApi")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -136,7 +141,7 @@ public class FillFragmentReview extends Fragment {
                                             }
                                             Reviews reviews = new Reviews(firebaseUser.getUid().toString(),String.valueOf(last_idReview),insertReview_edExam.getText().toString(),
                                                     insertReview_edProfessor.getText().toString(),insertReview_txtMark.getText().toString(),
-                                                    String.valueOf(ratingBar_niceness.getRating()),insertReview_edComment.getText().toString());
+                                                    String.valueOf(ratingBar_niceness.getRating()),insertReview_edComment.getText().toString(),getUniversity(),getDepartment());
                                             databaseAccess.InsertReview(reviews);
 
                                             Toast toast = Toast.makeText(getContext(),"Your review has been saved!", Toast.LENGTH_SHORT);
@@ -169,7 +174,7 @@ public class FillFragmentReview extends Fragment {
                                         }
                                         Reviews reviews = new Reviews(firebaseUser.getUid(),String.valueOf(last_idReview),insertReview_edExam.getText().toString(),
                                                 insertReview_edProfessor.getText().toString(),insertReview_txtMark.getText().toString(),
-                                                String.valueOf(ratingBar_niceness.getRating()),insertReview_edComment.getText().toString());
+                                                String.valueOf(ratingBar_niceness.getRating()),insertReview_edComment.getText().toString(),getUniversity(),getDepartment());
                                         databaseAccess.InsertReview(reviews);
                                         Toast toast = Toast.makeText(getContext(),"Your first review has been saved!", Toast.LENGTH_SHORT);
                                         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -197,5 +202,20 @@ public class FillFragmentReview extends Fragment {
 
     }
 
+    private String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
+    private String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
 }

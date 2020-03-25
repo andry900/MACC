@@ -8,9 +8,11 @@ public class Reviews {
     private String mark;
     private String niceness;
     private String comment;
+    private String university;
+    private String department;
 
     public Reviews(String idUser, String idReview, String exam, String professor,
-                   String mark, String niceness, String comment) {
+                   String mark, String niceness, String comment,String university,String department) {
         this.idUser = idUser;
         this.idReview = idReview;
         this.exam = exam;
@@ -18,6 +20,8 @@ public class Reviews {
         this.mark = mark;
         this.niceness = niceness;
         this.comment = comment;
+        this.university = university;
+        this.department = department;
     }
 
     public Reviews(){}
@@ -76,5 +80,21 @@ public class Reviews {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }
