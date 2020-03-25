@@ -22,13 +22,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     static final int GOOGLE_SIGN_IN = 123;
@@ -51,6 +45,20 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        //CHECK USER STATE
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUser user = mAuth.getCurrentUser();
+
+            if (Objects.equals(user.getEmail(), "")) {
+                updateUI("", "", user);
+            } else {
+                Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+                startActivity(navigationActivity);
+            }
+        }
+
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         Button login = findViewById(R.id.login);
@@ -60,10 +68,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         LoginButton facebook_login = findViewById(R.id.facebook_login);
         progressBar = findViewById(R.id.progress_circular);
 
-        mAuth = FirebaseAuth.getInstance();
-
         //EMAIL & PASSWORD
-        login.setOnClickListener(v -> LoginBasic(email.getText().toString(), password.getText().toString()));
+        login.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            LoginBasic(email.getText().toString(), password.getText().toString());
+        });
         signIn.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), PopUpSignIn.class);
             startActivity(intent);
@@ -100,16 +109,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 }
             });
         });
-
-        //CHECK USER STATE
-        if (mAuth.getCurrentUser() != null) {
-            FirebaseUser user = mAuth.getCurrentUser();
-            updateUI("", "", user);
-        }
     }
 
     public void LoginBasic(String pEmail, String pPassword) {
         if (TextUtils.isEmpty(pEmail) || TextUtils.isEmpty(pPassword)) {
+            progressBar.setVisibility(View.INVISIBLE);
+
             if (TextUtils.isEmpty(pEmail)) {
                 email.setError("Email can not be empty!");
             }
@@ -121,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mAuth.signInWithEmailAndPassword(pEmail, pPassword)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
+                            progressBar.setVisibility(View.INVISIBLE);
+
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI("", "", user);
@@ -209,40 +216,22 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     private void updateUI(String name, String surname, FirebaseUser user) {
-        if (user != null) {
-            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-            Query query = rootRef.child("users").orderByChild("email").equalTo(user.getEmail());
+        if (user != null) { // new User
+            Users newUser;
+            DatabaseAccess dbAccess = new DatabaseAccess();
 
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getChildrenCount() == 1) {     // User already present in the database
-                        Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
-                        startActivity(navigationActivity);
-                    } else {    // new User
-                        Users newUser;
-                        DatabaseAccess dbAccess = new DatabaseAccess();
+            if (name.equals("") && surname.equals("")) {    // Google & Facebook sign in
+                newUser = new Users(user.getUid(), user.getDisplayName(), "",
+                        user.getEmail(), "", "", "");
 
-                        if (name.equals("") && surname.equals("")) {    // Google & Facebook sign in
-                            Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
-                            startActivity(navigationActivity);
+                Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+                startActivity(navigationActivity);
+            } else {    // email & password sign in
+                newUser = new Users(user.getUid(), name, surname, user.getEmail(),
+                        "", "", "");
+            }
 
-                            newUser = new Users(user.getUid(), user.getDisplayName(), "",
-                                    user.getEmail(), "", "", "");
-                        } else {    // email & password sign in
-                            newUser = new Users(user.getUid(), name, surname, user.getEmail(),
-                                    "", "", "");
-                        }
-
-                        dbAccess.InsertUser(newUser);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d("TAG", "Database: onCancelled");
-                }
-            });
+            dbAccess.InsertUser(newUser);
         } else {
             CreateToast("Authentication failed.");
         }
