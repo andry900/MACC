@@ -22,6 +22,13 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +36,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.io.Serializable;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     static final int GOOGLE_SIGN_IN = 123;
@@ -48,67 +54,61 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mAuth = FirebaseAuth.getInstance();
 
         //CHECK USER STATE
-        if (mAuth.getCurrentUser() != null) {
-            FirebaseUser user = mAuth.getCurrentUser();
+        if (mAuth.getCurrentUser() != null) {   //user already registered
+            Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+            startActivity(navigationActivity);
+        } else {    // new user
+            email = findViewById(R.id.email);
+            password = findViewById(R.id.password);
+            Button login = findViewById(R.id.login);
+            Button signIn = findViewById(R.id.sign_in);
 
-            if (Objects.equals(user.getEmail(), "")) {
-                updateUI("", "", user);
-            } else {
-                Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
-                startActivity(navigationActivity);
-            }
-        }
+            Button google_login = findViewById(R.id.google_login);
+            LoginButton facebook_login = findViewById(R.id.facebook_login);
+            progressBar = findViewById(R.id.progress_circular);
 
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        Button login = findViewById(R.id.login);
-        Button signIn = findViewById(R.id.sign_in);
-
-        Button google_login = findViewById(R.id.google_login);
-        LoginButton facebook_login = findViewById(R.id.facebook_login);
-        progressBar = findViewById(R.id.progress_circular);
-
-        //EMAIL & PASSWORD
-        login.setOnClickListener(v -> {
-            progressBar.setVisibility(View.VISIBLE);
-            LoginBasic(email.getText().toString(), password.getText().toString());
-        });
-        signIn.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), PopUpSignIn.class);
-            startActivity(intent);
-        });
-
-        //GOOGLE
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        google_login.setOnClickListener(v -> SignInGoogle());
-
-        //FACEBOOK
-        callbackManager = CallbackManager.Factory.create();
-        facebook_login.setPermissions("email", "public_profile");
-        facebook_login.setOnClickListener(v -> {
-            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    handleFacebookAccessToken(loginResult.getAccessToken());
-                }
-
-                @Override
-                public void onCancel() {
-                    Log.d("TAG", "facebook:onCancel");
-                }
-
-                @Override
-                public void onError(FacebookException error) {
-                    Log.d("TAG", "facebook:onError", error);
-                }
+            //EMAIL & PASSWORD
+            login.setOnClickListener(v -> {
+                progressBar.setVisibility(View.VISIBLE);
+                LoginBasic(email.getText().toString(), password.getText().toString());
             });
-        });
+            signIn.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), PopUpSignIn.class);
+                startActivity(intent);
+            });
+
+            //GOOGLE
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            google_login.setOnClickListener(v -> SignInGoogle());
+
+            //FACEBOOK
+            callbackManager = CallbackManager.Factory.create();
+            facebook_login.setPermissions("email", "public_profile");
+            facebook_login.setOnClickListener(v -> {
+                LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d("TAG", "facebook:onCancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d("TAG", "facebook:onError", error);
+                    }
+                });
+            });
+        }
     }
 
     public void LoginBasic(String pEmail, String pPassword) {
@@ -217,21 +217,39 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private void updateUI(String name, String surname, FirebaseUser user) {
         if (user != null) { // new User
-            Users newUser;
-            DatabaseAccess dbAccess = new DatabaseAccess();
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            Query query = rootRef.child("users").orderByChild("email").equalTo(user.getEmail());
 
-            if (name.equals("") && surname.equals("")) {    // Google & Facebook sign in
-                newUser = new Users(user.getUid(), user.getDisplayName(), "",
-                        user.getEmail(), "", "", "");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getChildrenCount() == 1) {     // User already present in the database
+                        Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+                        startActivity(navigationActivity);
+                    } else {    // new User
+                        Users newUser;
+                        DatabaseAccess dbAccess = new DatabaseAccess();
 
-                Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
-                startActivity(navigationActivity);
-            } else {    // email & password sign in
-                newUser = new Users(user.getUid(), name, surname, user.getEmail(),
-                        "", "", "");
-            }
+                        if (name.equals("") && surname.equals("")) {    // Google & Facebook sign in
+                            Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
+                            startActivity(navigationActivity);
 
-            dbAccess.InsertUser(newUser);
+                            newUser = new Users(user.getUid(), user.getDisplayName(), "",
+                                    user.getEmail(), "", "", "");
+                        } else {    // email & password sign in
+                            newUser = new Users(user.getUid(), name, surname, user.getEmail(),
+                                    "", "", "");
+                        }
+
+                        dbAccess.InsertUser(newUser);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         } else {
             CreateToast("Authentication failed.");
         }
