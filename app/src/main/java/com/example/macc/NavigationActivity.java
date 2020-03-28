@@ -54,9 +54,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction().
-                replace(R.id.nav_host_fragment,new HomeFragment(),"fragment_home").commit();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

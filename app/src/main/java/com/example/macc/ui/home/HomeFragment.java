@@ -1,5 +1,6 @@
 package com.example.macc.ui.home;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ public class HomeFragment extends Fragment {
                                 String department = (String) snapshot.child("department").getValue();
 
                                 query_reviews.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @SuppressLint("DefaultLocale")
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         ArrayList<String> exams = new ArrayList<>();
@@ -64,8 +66,36 @@ public class HomeFragment extends Fragment {
                                                     }
                                                 }
                                             }
+                                            ArrayList<String> avg_mark_array = new ArrayList<String>();
+                                            ArrayList<String> avg_niceness_array = new ArrayList<String>();
+                                            float mark = 0;
+                                            float niceness = 0;
+                                            int num_exam_found = 0;
+                                            for(int i = 0; i < exams.size(); i++){
+                                                for (DataSnapshot snapshot_review : dataSnapshot.getChildren()) {
+                                                    if (Objects.equals(snapshot_review.child("university").getValue(), university) &&
+                                                            Objects.equals(snapshot_review.child("department").getValue(), department)) {
+                                                        if (exams.get(i).equals(snapshot_review.child("exam").getValue())){
+                                                            num_exam_found++;
+                                                            mark += Float.parseFloat(snapshot_review.child("mark").getValue().toString());
+                                                            niceness += Float.parseFloat(snapshot_review.child("niceness").getValue().toString());
+                                                        }
+                                                    }
+                                                }
+                                                float avg_mark = mark / num_exam_found;
+                                                float avg_niceness = niceness / num_exam_found;
+                                                avg_mark_array.add(String.format("%.2f",avg_mark));
+                                                avg_niceness_array.add(String.format("%.2f",avg_niceness));
+                                                mark = 0;
+                                                niceness = 0;
+                                                num_exam_found = 0;
+                                            }
 
-                                            CustomAdapterHome adapter = new CustomAdapterHome((Activity) getContext(), exams);
+                                            for (int y = 0; y< avg_mark_array.size() ; y++){
+                                                System.out.println("array mark: "+avg_mark_array.get(y));
+                                            }
+
+                                            CustomAdapterHome adapter = new CustomAdapterHome((Activity) getContext(),exams,avg_mark_array,avg_niceness_array);
                                             totalExams_listView.setAdapter(adapter);
 
                                             if (totalExams_listView.getAdapter().getCount() != 0) {

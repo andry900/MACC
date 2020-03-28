@@ -11,79 +11,84 @@
         android:background="#FFFFFF">
 
         <ImageView
-            android:id="@+id/image_itemListView_totalExam"
+            android:id="@+id/image_itemListView_totalReview_fte"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            app:srcCompat="@mipmap/ic_exam" />
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@mipmap/ic_student" />
 
         <TextView
-            android:id="@+id/textView_itemListView_totalExam"
-            android:layout_width="260dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
+            android:id="@+id/simple_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/image_itemListView_totalReview_fte"
+            android:text="@string/Comment"
+            android:textColor="#000"
+            android:fontFamily="@font/amita" />
+
+
+        <TextView
+            android:id="@+id/textView_itemListView_totalReview_fte"
+            android:layout_width="280dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/simple_textView"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/image_itemListView_totalExam"
+            android:layout_toEndOf="@+id/image_itemListView_totalReview_fte"
             android:background="#F1F4F6"
-            android:gravity="center"
             android:fontFamily="@font/amita"
+            android:scrollbars="vertical"
             android:textColor="#000" />
 
         <ImageView
-            android:id="@+id/image_arrow_totalExam"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_toEndOf="@+id/textView_itemListView_totalExam"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="50dp"
-            app:srcCompat="@drawable/ic_arrow" />
-
-        <ImageView
-            android:id="@+id/image_itemListView_mark_totalExam"
+            android:id="@+id/image_itemListView_mark_totalReview_fte"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalExam"
-            android:layout_marginStart="85dp"
+            android:layout_below="@+id/textView_itemListView_totalReview_fte"
+            android:layout_marginStart="110dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             app:srcCompat="@drawable/ic_check_logo" />
 
         <TextView
-            android:id="@+id/textView_itemListView_mark_totalExam"
+            android:id="@+id/textView_itemListView_mark_totalReview_fte"
             android:layout_width="70dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalExam"
+            android:layout_below="@+id/textView_itemListView_totalReview_fte"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/image_itemListView_mark_totalExam"
+            android:layout_toEndOf="@+id/image_itemListView_mark_totalReview_fte"
             android:background="#CAEDA1"
             android:gravity="center"
             android:textColor="#000" />
 
         <ImageView
-            android:id="@+id/image_itemListView_star_totalExam"
+            android:id="@+id/image_itemListView_star_totalReview_fte"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalExam"
+            android:layout_below="@+id/textView_itemListView_totalReview_fte"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/textView_itemListView_mark_totalExam"
+            android:layout_toEndOf="@+id/textView_itemListView_mark_totalReview_fte"
             app:srcCompat="@drawable/ic_star_logo" />
 
         <TextView
-            android:id="@+id/textView_itemListView_niceness_totalExam"
+            android:id="@+id/textView_itemListView_niceness_totalReview_fte"
             android:layout_width="70dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalExam"
+            android:layout_below="@+id/textView_itemListView_totalReview_fte"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/image_itemListView_star_totalExam"
+            android:layout_toEndOf="@+id/image_itemListView_star_totalReview_fte"
             android:background="#E4DEA1"
             android:gravity="center"
             android:textColor="#000" />
