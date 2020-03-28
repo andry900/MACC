@@ -3,7 +3,6 @@ package com.example.macc;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +45,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private boolean doubleBackToExitPressedOnce = false;
+    private long backPressedTime;
+    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,26 +233,22 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             navigationView.getMenu().getItem(3).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
         }
-        else if (fragment instanceof HomeFragment) {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                finish();
-            } else {
-                doubleBackToExitPressedOnce = true;
-                Toast.makeText(this, "Please click BACK again to exit!", Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        doubleBackToExitPressedOnce = false;
-                    }
-                }, 1500);
-            }
-        }
         else if (fragment instanceof ShowFragmentHome) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
                     .commit();
+        }
+        else {  //HomeFragment
+            if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                backToast.cancel();
+                super.onBackPressed();
+                return;
+            } else {
+                backToast = Toast.makeText(this, "Please click BACK again to exit!", Toast.LENGTH_SHORT);
+                backToast.show();
+            }
+            backPressedTime = System.currentTimeMillis();
         }
     }
 }

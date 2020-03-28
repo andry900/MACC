@@ -111,6 +111,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        finish();
+    }
+
     public void LoginBasic(String pEmail, String pPassword) {
         if (TextUtils.isEmpty(pEmail) || TextUtils.isEmpty(pPassword)) {
             progressBar.setVisibility(View.INVISIBLE);
