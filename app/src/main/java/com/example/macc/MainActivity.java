@@ -234,20 +234,19 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         startActivity(navigationActivity);
                     } else {    // new User
                         Users newUser;
-                        DatabaseAccess dbAccess = new DatabaseAccess();
 
                         if (name.equals("") && surname.equals("")) {    // Google & Facebook sign in
                             Intent navigationActivity = new Intent(getApplicationContext(), NavigationActivity.class);
                             startActivity(navigationActivity);
 
                             newUser = new Users(user.getUid(), user.getDisplayName(), "",
-                                    user.getEmail(), "", "", "");
+                                    user.getEmail(), "", "");
                         } else {    // email & password sign in
-                            newUser = new Users(user.getUid(), name, surname, user.getEmail(),
-                                    "", "", "");
+                            newUser = new Users(user.getUid(), name, surname, user.getEmail(), "", "");
                         }
 
-                        dbAccess.InsertUser(newUser);
+                        DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
+                        database.child(newUser.getId()).setValue(newUser);
                     }
                 }
 

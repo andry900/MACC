@@ -5,19 +5,19 @@ public class Users {
     private String name;
     private String surname;
     private String email;
-    private String date_birth;
     private String university;
     private String department;
 
-    Users(String id, String name, String surname, String email, String date_birth, String university, String department) {
+    Users(String id, String name, String surname, String email, String university, String department) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.date_birth = date_birth;
         this.university = university;
         this.department = department;
     }
+
+    public Users() {}
 
     public String getId() {
         return id;
@@ -49,14 +49,6 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getDate_birth() {
-        return date_birth;
-    }
-
-    public void setDate_birth(String date_birth) {
-        this.date_birth = date_birth;
     }
 
     public String getUniversity() {
