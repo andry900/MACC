@@ -40,13 +40,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import android.os.Handler;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private long backPressedTime;
-    private Toast backToast;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,15 +240,14 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                     .commit();
         }
         else {  //HomeFragment
-            if (backPressedTime + 2000 > System.currentTimeMillis()) {
-                backToast.cancel();
+            if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
-                return;
+                finish();
             } else {
-                backToast = Toast.makeText(this, "Please click BACK again to exit!", Toast.LENGTH_SHORT);
-                backToast.show();
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Please click BACK again to exit!", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
             }
-            backPressedTime = System.currentTimeMillis();
         }
     }
 }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -67,19 +66,21 @@ public class HomeFragment extends Fragment {
                                                     }
                                                 }
                                             }
-                                            ArrayList<String> avg_mark_array = new ArrayList<String>();
-                                            ArrayList<String> avg_niceness_array = new ArrayList<String>();
+                                            ArrayList<String> avg_mark_array = new ArrayList<>();
+                                            ArrayList<String> avg_niceness_array = new ArrayList<>();
                                             float mark = 0;
                                             float niceness = 0;
                                             int num_exam_found = 0;
+
                                             for(int i = 0; i < exams.size(); i++){
                                                 for (DataSnapshot snapshot_review : dataSnapshot.getChildren()) {
                                                     if (Objects.equals(snapshot_review.child("university").getValue(), university) &&
                                                             Objects.equals(snapshot_review.child("department").getValue(), department)) {
+
                                                         if (exams.get(i).equals(snapshot_review.child("exam").getValue())){
                                                             num_exam_found++;
-                                                            mark += Float.parseFloat(snapshot_review.child("mark").getValue().toString());
-                                                            niceness += Float.parseFloat(snapshot_review.child("niceness").getValue().toString());
+                                                            mark += Float.parseFloat(Objects.requireNonNull(snapshot_review.child("mark").getValue()).toString());
+                                                            niceness += Float.parseFloat(Objects.requireNonNull(snapshot_review.child("niceness").getValue()).toString());
                                                         }
                                                     }
                                                 }
@@ -92,11 +93,7 @@ public class HomeFragment extends Fragment {
                                                 num_exam_found = 0;
                                             }
 
-                                            for (int y = 0; y< avg_mark_array.size() ; y++){
-                                                System.out.println("array mark: "+avg_mark_array.get(y));
-                                            }
-
-                                            CustomAdapterHome adapter = new CustomAdapterHome((Activity) getContext(),exams,avg_mark_array,avg_niceness_array);
+                                            CustomAdapterHome adapter = new CustomAdapterHome((Activity) getContext(), exams, avg_mark_array, avg_niceness_array);
                                             totalExams_listView.setAdapter(adapter);
 
                                             if (totalExams_listView.getAdapter().getCount() != 0) {
@@ -145,7 +142,7 @@ public class HomeFragment extends Fragment {
 
         totalExams_listView.setOnItemClickListener((parent, view, position, id) -> {
             ShowFragmentHome showFragmentHome = ShowFragmentHome
-                    .newInstance("exam_item_selected", totalExams_listView
+                    .newInstance(totalExams_listView
                             .getItemAtPosition(position)
                             .toString());
 
@@ -154,7 +151,6 @@ public class HomeFragment extends Fragment {
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment, showFragmentHome,"fragment_show_home")
                     .commit();
-
         });
 
         return root;

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.macc.R;
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -30,9 +28,7 @@ public class ShowFragmentHome extends Fragment {
         String exam_item_selected;
 
         Bundle bundle = getArguments();
-
-        assert bundle != null;
-        exam_item_selected = bundle.getString("exam_item_selected");
+        exam_item_selected = Objects.requireNonNull(bundle).getString("exam_item_selected");
 
         if (firebaseUser != null) {
             DatabaseReference rootRefReviews = FirebaseDatabase.getInstance().getReference("reviews");
@@ -55,9 +51,9 @@ public class ShowFragmentHome extends Fragment {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.exists()) {
-                                            ArrayList<String> comments = new ArrayList<String>();
-                                            ArrayList<String> marks = new ArrayList<String>();
-                                            ArrayList<String> niceness_values = new ArrayList<String>();
+                                            ArrayList<String> comments = new ArrayList<>();
+                                            ArrayList<String> marks = new ArrayList<>();
+                                            ArrayList<String> niceness_values = new ArrayList<>();
                                             for (DataSnapshot snapshot_review : dataSnapshot.getChildren()) {
                                                 if (Objects.equals(snapshot_review.child("university").getValue(), university) &&
                                                         Objects.equals(snapshot_review.child("department").getValue(), department)) {
@@ -69,7 +65,7 @@ public class ShowFragmentHome extends Fragment {
                                                     }
                                                 }
                                             }
-                                            CustomAdapterShowFragmentHome adapter = new CustomAdapterShowFragmentHome((Activity)getContext(),comments,marks,niceness_values);
+                                            CustomAdapterShowFragmentHome adapter = new CustomAdapterShowFragmentHome((Activity)getContext(), comments, marks, niceness_values);
                                             totalReviews_fte_listView.setAdapter(adapter);
 
                                         }
@@ -95,13 +91,11 @@ public class ShowFragmentHome extends Fragment {
         return root;
     }
 
-
-
-    static ShowFragmentHome newInstance(String key, String value) {
+    static ShowFragmentHome newInstance(String value) {
         Bundle arguments = new Bundle();
         ShowFragmentHome showFragmentHome = new ShowFragmentHome();
 
-        arguments.putString(key, value);
+        arguments.putString("exam_item_selected", value);
         showFragmentHome.setArguments(arguments);
 
         return showFragmentHome;
