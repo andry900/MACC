@@ -45,4 +45,5 @@
     <string name="Delete">Delete</string>
     <string name="no_profile_section_set">Before continuing, you must fill the University and department fields in your Profile section!</string>
     <string name="no_review_has_been_found">No reviews has been found for your department!</string>
+    <string name="average">Average:</string>
 </resources>

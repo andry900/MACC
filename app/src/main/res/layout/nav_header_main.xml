@@ -27,12 +27,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/imageView" />
+        android:layout_below="@+id/imageView"
+        android:textColor="#FFF"/>
 
     <TextView
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nameTextView" />
+        android:layout_below="@+id/nameTextView"
+        android:textColor="#FFF"/>
 
 </RelativeLayout>

@@ -15,7 +15,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
             app:srcCompat="@mipmap/ic_exam" />
 
@@ -41,12 +41,23 @@
             android:layout_marginTop="50dp"
             app:srcCompat="@drawable/ic_arrow" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_itemListView_totalExam"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:text="@string/average"
+            android:textColor="#000"
+            android:fontFamily="@font/amita"/>
+
+
         <ImageView
             android:id="@+id/image_itemListView_mark_totalExam"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_below="@+id/textView_itemListView_totalExam"
-            android:layout_marginStart="85dp"
+            android:layout_marginStart="90dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             app:srcCompat="@drawable/ic_check_logo" />
