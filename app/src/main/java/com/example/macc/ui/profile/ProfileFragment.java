@@ -1,5 +1,7 @@
 package com.example.macc.ui.profile;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.example.macc.HerokuService;
 import com.example.macc.R;
@@ -45,7 +48,9 @@ import retrofit2.Retrofit;
 
 public class ProfileFragment extends Fragment implements OnMapReadyCallback {
     private View root;
+    private GoogleMap mMap;
     private AutoCompleteTextView university_name;
+    final private int TAG_CODE_PERMISSION_LOCATION = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -257,22 +262,51 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
         List<Address> addresses;
-        Geocoder geocoder = new Geocoder(getContext());
+        Geocoder geocoder = new Geocoder(getActivity());
 
         try {
+            if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted and request the permission
+                requestPermissions(
+                            new String[] {
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                            },
+                            TAG_CODE_PERMISSION_LOCATION);
+            } else {    // permission already granted
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            }
+
             addresses = geocoder.getFromLocationName(university_name.getText().toString(), 1);
+
             if (addresses.size() > 0) {
                 double latitude = addresses.get(0).getLatitude();
                 double longitude = addresses.get(0).getLongitude();
 
                 LatLng latLng = new LatLng(latitude, longitude);
 
-                googleMap.addMarker(new MarkerOptions().position(latLng).title("University"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                mMap.addMarker(new MarkerOptions().position(latLng).title("University"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             }
         } catch (IOException e) {
             Log.d("TAG", "Google Maps: onMapReady");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == TAG_CODE_PERMISSION_LOCATION) {  // check if is the location permission
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {  // check if the user denied or allowed location permission
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            }
         }
     }
 }
