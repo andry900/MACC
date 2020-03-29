@@ -1,9 +1,11 @@
 package com.example.macc.ui.home;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -25,6 +27,7 @@ public class CustomAdapterShowFragmentHome extends ArrayAdapter<String> {
         this.niceness_values = niceness_values;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public View getView(int position, View view, ViewGroup parent){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.item_totalreview_for_thatexam,null,true);
@@ -34,6 +37,21 @@ public class CustomAdapterShowFragmentHome extends ArrayAdapter<String> {
         TextView niceness = rowView.findViewById(R.id.textView_itemListView_niceness_totalReview_fte);
 
         comment.setText(comments.get(position));
+        comment.setMovementMethod(new ScrollingMovementMethod());
+        View.OnTouchListener listener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isLarger;
+                isLarger = ((TextView) v).getLineCount() * ((TextView) v).getLineHeight() > v.getHeight();
+                if (event.getAction() == MotionEvent.ACTION_MOVE && isLarger) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                } else {
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
+            }
+        };
+        comment.setOnTouchListener(listener);
         mark.setText(marks.get(position));
         niceness.setText(niceness_values.get(position));
 

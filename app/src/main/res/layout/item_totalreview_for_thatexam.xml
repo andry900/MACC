@@ -15,8 +15,8 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             app:srcCompat="@mipmap/ic_student" />
 
         <TextView
@@ -24,17 +24,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/image_itemListView_totalReview_fte"
             android:text="@string/Comment"
             android:textColor="#000"
-            android:fontFamily="@font/amita" />
+            android:fontFamily="@font/amita"
+            android:scrollbars = "vertical"/>
 
 
         <TextView
             android:id="@+id/textView_itemListView_totalReview_fte"
             android:layout_width="280dp"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_below="@+id/simple_textView"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
@@ -50,20 +51,16 @@
             android:id="@+id/image_itemListView_mark_totalReview_fte"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalReview_fte"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/image_itemListView_totalReview_fte"
+            android:layout_marginStart="10dp"
             app:srcCompat="@drawable/ic_check_logo" />
 
         <TextView
             android:id="@+id/textView_itemListView_mark_totalReview_fte"
-            android:layout_width="70dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalReview_fte"
+            android:layout_below="@+id/image_itemListView_totalReview_fte"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
             android:layout_toEndOf="@+id/image_itemListView_mark_totalReview_fte"
             android:background="#CAEDA1"
             android:gravity="center"
@@ -73,20 +70,19 @@
             android:id="@+id/image_itemListView_star_totalReview_fte"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalReview_fte"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_below="@+id/image_itemListView_mark_totalReview_fte"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:layout_toEndOf="@+id/textView_itemListView_mark_totalReview_fte"
             app:srcCompat="@drawable/ic_star_logo" />
 
         <TextView
             android:id="@+id/textView_itemListView_niceness_totalReview_fte"
-            android:layout_width="70dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@+id/textView_itemListView_totalReview_fte"
+            android:layout_below="@+id/textView_itemListView_mark_totalReview_fte"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:layout_toEndOf="@+id/image_itemListView_star_totalReview_fte"
             android:background="#E4DEA1"
