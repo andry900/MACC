@@ -71,6 +71,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -202,6 +203,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             navigationView.getMenu().getItem(1).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
+            drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment instanceof ReviewsFragment) {
             getSupportFragmentManager()
@@ -211,6 +213,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             navigationView.getMenu().getItem(2).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
+            drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment instanceof FillFragmentReview) {
             getSupportFragmentManager()
@@ -232,6 +235,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             navigationView.getMenu().getItem(3).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
+            drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment instanceof ShowFragmentHome) {
             getSupportFragmentManager()

@@ -30,7 +30,7 @@
             android:layout_marginBottom="20dp"
             android:layout_gravity="center|bottom"
             android:background="@drawable/round_bg"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="#FF9800"
             android:text="@string/insert_a_new_review"
             android:visibility="invisible"/>
 

@@ -81,8 +81,8 @@
         android:layout_toEndOf="@+id/showReview_mark"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
-        android:progressTint="#FFEB3B"
-        android:progressBackgroundTint="#3F51B5" />
+        android:progressTint="#E91E63"
+        android:progressBackgroundTint="#CDDC39" />
 
     <ImageView
         android:id="@+id/imageView_markShowReview"
@@ -183,7 +183,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/round_bg"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="#FF9800"
             android:layout_weight="0.5"
             android:text="@string/Update"/>
 
@@ -198,7 +198,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/round_bg"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="#FF9800"
             android:layout_weight="0.5"
             android:text="@string/Delete"/>
 
