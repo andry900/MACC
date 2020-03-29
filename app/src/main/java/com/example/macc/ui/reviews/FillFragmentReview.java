@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import com.example.macc.DatabaseAccess;
 import com.example.macc.R;
 import com.example.macc.Reviews;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +37,6 @@ public class FillFragmentReview extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         int progress_mark = 18;
-        DatabaseAccess databaseAccess = new DatabaseAccess();
 
         View root = inflater.inflate(R.layout.fragment_fill_review, container, false);
         EditText insertReview_edExam = root.findViewById(R.id.insertReview_edExam);
@@ -125,12 +123,13 @@ public class FillFragmentReview extends Fragment {
                                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                 last_idReview = Integer.parseInt((String) Objects.requireNonNull(snapshot.child("idReview").getValue())) + 1;
                                             }
-                                            Reviews reviews = new Reviews(firebaseUser.getUid(), String.valueOf(last_idReview),
+                                            Reviews review = new Reviews(firebaseUser.getUid(), String.valueOf(last_idReview),
                                                     insertReview_edExam.getText().toString(), insertReview_edProfessor.getText().toString(),
                                                     insertReview_txtMark.getText().toString(), String.valueOf(ratingBar_niceness.getRating()),
                                                     insertReview_edComment.getText().toString(), getUniversity(),getDepartment());
 
-                                            databaseAccess.InsertReview(reviews);
+                                            DatabaseReference database = FirebaseDatabase.getInstance().getReference("reviews");
+                                            database.child(review.getIdReview()).setValue(review);
 
                                             Toast toast = Toast.makeText(getContext(),"Your review has been saved!", Toast.LENGTH_SHORT);
                                             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -163,12 +162,13 @@ public class FillFragmentReview extends Fragment {
                                         } else {
                                             last_idReview = 1;
                                         }
-                                        Reviews reviews = new Reviews(firebaseUser.getUid(),String.valueOf(last_idReview),
+                                        Reviews review = new Reviews(firebaseUser.getUid(),String.valueOf(last_idReview),
                                                 insertReview_edExam.getText().toString(), insertReview_edProfessor.getText().toString(),
                                                 insertReview_txtMark.getText().toString(), String.valueOf(ratingBar_niceness.getRating()),
                                                 insertReview_edComment.getText().toString(), getUniversity(), getDepartment());
 
-                                        databaseAccess.InsertReview(reviews);
+                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference("reviews");
+                                        database.child(review.getIdReview()).setValue(review);
 
                                         Toast toast = Toast.makeText(getContext(),"Your first review has been saved!", Toast.LENGTH_SHORT);
                                         toast.setGravity(Gravity.CENTER, 0, 0);
