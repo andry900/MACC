@@ -132,8 +132,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mAuth.signInWithEmailAndPassword(pEmail, pPassword)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
-                            progressBar.setVisibility(View.INVISIBLE);
-
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI("", "", user);
@@ -141,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                             // If sign in fails, display a message to the user.
                             updateUI("", "", null);
                         }
+
+                        progressBar.setVisibility(View.INVISIBLE);
                     });
         }
     }
@@ -173,15 +173,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        progressBar.setVisibility(View.INVISIBLE);
-
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI("", "", user);
                     } else {
-                        progressBar.setVisibility(View.INVISIBLE);
-
                         updateUI("", "", null);
                     }
+
+                    progressBar.setVisibility(View.INVISIBLE);
                 });
     }
 
@@ -190,15 +188,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        progressBar.setVisibility(View.INVISIBLE);
-
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI("", "", user);
                     } else {
-                        progressBar.setVisibility(View.INVISIBLE);
-
                         updateUI("", "", null);
                     }
+
+                    progressBar.setVisibility(View.INVISIBLE);
                 });
     }
 
