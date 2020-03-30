@@ -16,7 +16,7 @@
             android:layout_height="70dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            app:srcCompat="@mipmap/ic_review" />
+            app:srcCompat="@mipmap/ic_review"/>
 
         <TextView
             android:id="@+id/textView_itemListView_review"
