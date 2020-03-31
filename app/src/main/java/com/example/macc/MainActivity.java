@@ -1,8 +1,7 @@
 package com.example.macc;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -32,8 +31,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -159,13 +156,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(name, surname, user);
 
-                        Toast toast = Toast.makeText(PopUpSignIn.getSignInContext(),"You have successfully registered!", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        CreateToast(PopUpSignIn.getSignInContext(),"You have successfully registered!");
                     } else {
-                        Toast toast = Toast.makeText(PopUpSignIn.getSignInContext(),"Error in registration!", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        CreateToast(PopUpSignIn.getSignInContext(),"Error in registration!");
                     }
                 });
     }
@@ -260,11 +253,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 }
             });
         } else {
-            CreateToast("Authentication failed.");
+            CreateToast(this, "Authentication failed.");
         }
     }
 
-    public void CreateToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void CreateToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }
