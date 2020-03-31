@@ -19,13 +19,14 @@
 
     <TextView
         android:id="@+id/virgilio"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/bilbo"
+        android:gravity="center"
         android:textStyle="bold"
         android:textColor="#FFF"
         android:textSize="40sp"
@@ -60,10 +61,12 @@
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
-        android:background="#FFF"
+        android:background="@drawable/border"
+        android:backgroundTint="#FFF"
         android:hint="@string/email"
         android:textColorHint="#808080"
         android:inputType="textEmailAddress"
+        android:gravity="center"
         android:textColor="#000"/>
 
     <EditText
@@ -74,10 +77,12 @@
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
-        android:background="#FFF"
+        android:background="@drawable/border"
+        android:backgroundTint="#FFF"
         android:hint="@string/password"
         android:textColorHint="#808080"
         android:inputType="textPassword"
+        android:gravity="center"
         android:textColor="#000"/>
 
     <Button

@@ -15,6 +15,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labName"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <EditText
@@ -39,6 +40,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labSurname"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <EditText
@@ -64,6 +66,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labEmail"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <EditText
@@ -89,6 +92,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labPassword"
+        android:fontFamily="@font/amita"
         android:textColor="#000" />
 
     <EditText
