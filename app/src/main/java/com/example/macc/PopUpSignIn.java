@@ -1,6 +1,7 @@
 package com.example.macc;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -17,10 +18,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class PopUpSignIn extends Activity {
+    public static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = this;
         int width, height;
 
         setContentView(R.layout.sign_in);
@@ -90,5 +93,9 @@ public class PopUpSignIn extends Activity {
         height = displayMetrics.heightPixels;
 
         getWindow().setLayout((int) (width * 0.8), (int) (height * 0.53));
+    }
+
+    public static Context getSignInContext(){
+        return context;
     }
 }
