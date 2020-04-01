@@ -23,9 +23,9 @@ public class PopUpSignIn extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        context = this;
         int width, height;
 
+        context = this;
         setContentView(R.layout.sign_in);
         Button sign_in = findViewById(R.id.popup_btnSignIn);
         EditText popup_name = findViewById(R.id.popup_edName);
@@ -92,10 +92,10 @@ public class PopUpSignIn extends Activity {
         width = displayMetrics.widthPixels;
         height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int) (width * 0.8), (int) (height * 0.53));
+        getWindow().setLayout((int) (width * 0.9), (int) (height * 0.53));
     }
 
-    public static Context getSignInContext(){
+    public static Context getSignInContext() {
         return context;
     }
 }

@@ -10,10 +10,10 @@
     <ImageView
         android:id="@+id/profile_imageBackground"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="140dp"
         android:layout_centerHorizontal="true"
         android:background="@mipmap/ic_books_profile"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:contentDescription="@string/imagebooksprofile" />
 
     <ImageButton
@@ -21,17 +21,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@null"
         app:srcCompat="@mipmap/ic_university" />
 
     <AutoCompleteTextView
         android:id="@+id/profile_UniName"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_below="@+id/profile_imageUni"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"
         android:gravity="center"
@@ -58,7 +58,7 @@
         android:layout_height="25dp"
         android:layout_below="@+id/map"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="27.5dp"
+        android:layout_marginTop="17.5dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/labDepartment"
@@ -70,7 +70,7 @@
         android:layout_width="260dp"
         android:layout_height="40dp"
         android:layout_below="@+id/map"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/profile_labDepartment"
         android:completionThreshold="1"
@@ -160,7 +160,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_TextViewEmail"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/round_bg"
         android:backgroundTint="#FF9800"
         android:text="@string/Save"
