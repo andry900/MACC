@@ -1,6 +1,5 @@
 package com.example.macc.ui.home;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment {
                                 String department = (String) snapshot.child("department").getValue();
 
                                 query_reviews.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @SuppressLint("DefaultLocale")
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         ArrayList<String> exams = new ArrayList<>();
@@ -72,12 +71,12 @@ public class HomeFragment extends Fragment {
                                             float niceness = 0;
                                             int num_exam_found = 0;
 
-                                            for(int i = 0; i < exams.size(); i++){
+                                            for (int i = 0; i < exams.size(); i++) {
                                                 for (DataSnapshot snapshot_review : dataSnapshot.getChildren()) {
                                                     if (Objects.equals(snapshot_review.child("university").getValue(), university) &&
                                                             Objects.equals(snapshot_review.child("department").getValue(), department)) {
 
-                                                        if (exams.get(i).equals(snapshot_review.child("exam").getValue())){
+                                                        if (exams.get(i).equals(snapshot_review.child("exam").getValue())) {
                                                             num_exam_found++;
                                                             mark += Float.parseFloat(Objects.requireNonNull(snapshot_review.child("mark").getValue()).toString());
                                                             niceness += Float.parseFloat(Objects.requireNonNull(snapshot_review.child("niceness").getValue()).toString());
@@ -86,8 +85,8 @@ public class HomeFragment extends Fragment {
                                                 }
                                                 float avg_mark = mark / num_exam_found;
                                                 float avg_niceness = niceness / num_exam_found;
-                                                avg_mark_array.add(String.format("%.2f",avg_mark));
-                                                avg_niceness_array.add(String.format("%.2f",avg_niceness));
+                                                avg_mark_array.add(String.format(Locale.US, "%.2f", avg_mark));
+                                                avg_niceness_array.add(String.format(Locale.US, "%.2f", avg_niceness));
                                                 mark = 0;
                                                 niceness = 0;
                                                 num_exam_found = 0;

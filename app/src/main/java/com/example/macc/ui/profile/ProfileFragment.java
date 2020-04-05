@@ -1,6 +1,7 @@
 package com.example.macc.ui.profile;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -47,13 +48,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ProfileFragment extends Fragment implements OnMapReadyCallback {
-    private View root;
     private GoogleMap mMap;
     private AutoCompleteTextView university_name;
-    final private int TAG_CODE_PERMISSION_LOCATION = 1;
+    private final int TAG_CODE_PERMISSION_LOCATION = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_profile, container, false);
+        View root = inflater.inflate(R.layout.fragment_profile, container, false);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
@@ -62,7 +62,15 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                     .build();
 
             HerokuService service = retrofit.create(HerokuService.class);
+
             university_name = root.findViewById(R.id.profile_UniName);
+            MapView mapView = root.findViewById(R.id.map);
+
+            if (mapView != null) {
+                mapView.onCreate(null);
+                mapView.onResume();
+                mapView.getMapAsync(this);
+            }
 
             Call<ResponseBody> call = service.getRequest();
             call.enqueue(new Callback<ResponseBody>() {
@@ -157,7 +165,11 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                                 profile_edDepartment.setText(department);
                             }
 
-                            LoadMap();
+                            Thread t1 = new Thread(new RunnableImpl(), "t1");
+                            t1.start();
+
+                            Thread t2 = new Thread(new RunnableImpl(), "t2");
+                            t2.start();
                         }
                     }
 
@@ -191,7 +203,8 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                                 profile_edDepartment.setText(department);
                             }
 
-                            LoadMap();
+                            Thread t2 = new Thread(new RunnableImpl(), "t2");
+                            t2.start();
                         }
                     }
 
@@ -239,17 +252,8 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
         }
+
         return root;
-    }
-
-    private void LoadMap() {
-        MapView mapView = root.findViewById(R.id.map);
-
-        if (mapView != null) {
-            mapView.onCreate(null);
-            mapView.onResume();
-            mapView.getMapAsync(this);
-        }
     }
 
     private void ReloadFragment() {
@@ -260,42 +264,19 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                 .commit();
     }
 
+    private void RequestPermissions() {
+        // Permission is not granted and request the permission
+        requestPermissions(
+                new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                },
+                TAG_CODE_PERMISSION_LOCATION);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        List<Address> addresses;
-        Geocoder geocoder = new Geocoder(getActivity());
-
-        try {
-            if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                // Permission is not granted and request the permission
-                requestPermissions(
-                            new String[] {
-                                    Manifest.permission.ACCESS_FINE_LOCATION,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                            },
-                            TAG_CODE_PERMISSION_LOCATION);
-            } else {    // permission already granted
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            }
-
-            addresses = geocoder.getFromLocationName(university_name.getText().toString(), 1);
-
-            if (addresses.size() > 0) {
-                double latitude = addresses.get(0).getLatitude();
-                double longitude = addresses.get(0).getLongitude();
-
-                LatLng latLng = new LatLng(latitude, longitude);
-
-                mMap.addMarker(new MarkerOptions().position(latLng).title("University"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-            }
-        } catch (IOException e) {
-            Log.d("TAG", "Google Maps: onMapReady");
-        }
     }
 
     @Override
@@ -307,6 +288,41 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
             }
+        }
+    }
+
+    private class RunnableImpl extends Activity implements Runnable {
+        @Override
+        public void run() {
+            runOnUiThread(() -> {
+                List<Address> addresses;
+                Geocoder geocoder = new Geocoder(getActivity());
+
+                try {
+                    if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        RequestPermissions();
+                    } else {    // permission already granted
+                        mMap.setMyLocationEnabled(true);
+                        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                    }
+
+                    addresses = geocoder.getFromLocationName(university_name.getText().toString(), 1);
+
+                    if (addresses.size() > 0) {
+                        double latitude = addresses.get(0).getLatitude();
+                        double longitude = addresses.get(0).getLongitude();
+
+                        LatLng latLng = new LatLng(latitude, longitude);
+
+                        mMap.addMarker(new MarkerOptions().position(latLng).title("University"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                    }
+                } catch (IOException e) {
+                    Log.d("TAG", "Google Maps: onMapReady");
+                }
+            });
         }
     }
 }
