@@ -48,13 +48,25 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ProfileFragment extends Fragment implements OnMapReadyCallback {
+    private View root;
+    private Query query;
     private GoogleMap mMap;
+    private FirebaseUser firebaseUser;
     private AutoCompleteTextView university_name;
+    private AutoCompleteTextView profile_edDepartment;
     private final int TAG_CODE_PERMISSION_LOCATION = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        root = inflater.inflate(R.layout.fragment_profile, container, false);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        MapView mapView = root.findViewById(R.id.map);
+
+        if (mapView != null) {
+            mapView.onCreate(null);
+            mapView.onResume();
+            mapView.getMapAsync(this);
+        }
 
         if (firebaseUser != null) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -64,13 +76,6 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
             HerokuService service = retrofit.create(HerokuService.class);
 
             university_name = root.findViewById(R.id.profile_UniName);
-            MapView mapView = root.findViewById(R.id.map);
-
-            if (mapView != null) {
-                mapView.onCreate(null);
-                mapView.onResume();
-                mapView.getMapAsync(this);
-            }
 
             Call<ResponseBody> call = service.getRequest();
             call.enqueue(new Callback<ResponseBody>() {
@@ -102,7 +107,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
 
-            AutoCompleteTextView profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
+            profile_edDepartment = root.findViewById(R.id.profile_edDepartment);
 
             String[] departments = new String[]{
                     "Agriculture", "Architecture", "Architecture", "Design", "Cultural Heritage",
@@ -122,95 +127,11 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
 
             profile_edDepartment.setAdapter(adapter);
 
-            TextView profile_labViewName = root.findViewById(R.id.profile_labName);
-            TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
-
-            TextView profile_labViewSurname = root.findViewById(R.id.profile_labSurname);
-            TextView profile_TextViewSurname = root.findViewById(R.id.profile_TextViewSurname);
-
             TextView profile_TextViewEmail = root.findViewById(R.id.profile_TextViewEmail);
-
             Button profile_saveButton = root.findViewById(R.id.profile_btnSave);
 
-            String provider = firebaseUser.getProviderData().get(1).getProviderId();
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-            Query query = rootRef.child("users").orderByChild("id").equalTo(firebaseUser.getUid());
-
-            if (provider.equals("facebook.com") || provider.equals("google.com")) {
-                if (firebaseUser.getDisplayName() != null && !firebaseUser.getDisplayName().equals("")) {
-                    String[] displayName = firebaseUser.getDisplayName().split(" ", 2);
-                    profile_TextViewName.setText(displayName[0]);
-                    profile_TextViewSurname.setText(displayName[1]);
-                } else {
-                    profile_labViewName.setVisibility(View.INVISIBLE);
-                    profile_labViewSurname.setVisibility(View.INVISIBLE);
-                }
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String university = snapshot.child("university").getValue(String.class);
-                            String department = snapshot.child("department").getValue(String.class);
-
-                            if (university == null || university.equals("")) {
-                                university_name.setHint("Insert your university!");
-                            } else {
-                                university_name.setText(university);
-                            }
-
-                            if (department == null || department.equals("")) {
-                                profile_edDepartment.setHint("Insert your department!");
-                            } else {
-                                profile_edDepartment.setText(department);
-                            }
-
-                            Thread t1 = new Thread(new RunnableImpl(), "t1");
-                            t1.start();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d("TAG", "Database: onCancelled");
-                    }
-                });
-            } else {
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String name = snapshot.child("name").getValue(String.class);
-                            String surname = snapshot.child("surname").getValue(String.class);
-                            String university = snapshot.child("university").getValue(String.class);
-                            String department = snapshot.child("department").getValue(String.class);
-
-                            profile_TextViewName.setText(name);
-                            profile_TextViewSurname.setText(surname);
-
-                            if (university == null || university.equals("")) {
-                                university_name.setHint("Insert your university!");
-                            } else {
-                                university_name.setText(university);
-                            }
-
-                            if (department == null || department.equals("")) {
-                                profile_edDepartment.setHint("Insert your department!");
-                            } else {
-                                profile_edDepartment.setText(department);
-                            }
-
-                            Thread t2 = new Thread(new RunnableImpl(), "t2");
-                            t2.start();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
+            query = rootRef.child("users").orderByChild("id").equalTo(firebaseUser.getUid());
 
             profile_TextViewEmail.setText(firebaseUser.getEmail());
 
@@ -253,12 +174,12 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    private void ReloadFragment() {
-        Objects.requireNonNull(getActivity())
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, new ProfileFragment())
-                .commit();
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        Thread t1 = new Thread(new RunnableImpl(), "t1");
+        t1.start();
     }
 
     private void RequestPermissions() {
@@ -269,11 +190,6 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                         Manifest.permission.ACCESS_COARSE_LOCATION
                 },
                 TAG_CODE_PERMISSION_LOCATION);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
     }
 
     @Override
@@ -288,38 +204,102 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    private void ReloadFragment() {
+        Objects.requireNonNull(getActivity())
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, new ProfileFragment())
+                .commit();
+    }
+
     private class RunnableImpl extends Activity implements Runnable {
         @Override
         public void run() {
-            runOnUiThread(() -> {
-                List<Address> addresses;
-                Geocoder geocoder = new Geocoder(getActivity());
+            TextView profile_labViewName = root.findViewById(R.id.profile_labName);
+            TextView profile_TextViewName = root.findViewById(R.id.profile_TextViewName);
 
-                try {
-                    if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                            ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            TextView profile_labViewSurname = root.findViewById(R.id.profile_labSurname);
+            TextView profile_TextViewSurname = root.findViewById(R.id.profile_TextViewSurname);
 
-                        RequestPermissions();
-                    } else {    // permission already granted
-                        mMap.setMyLocationEnabled(true);
-                        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            String provider = firebaseUser.getProviderData().get(1).getProviderId();
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String name = "", surname = "";
+
+                        if (provider.equals("facebook.com") || provider.equals("google.com")) {
+                            if (firebaseUser.getDisplayName() != null && !firebaseUser.getDisplayName().equals("")) {
+                                String[] displayName = firebaseUser.getDisplayName().split(" ", 2);
+                                name = displayName[0];
+                                surname = displayName[1];
+                            } else {
+                                profile_labViewName.setVisibility(View.INVISIBLE);
+                                profile_labViewSurname.setVisibility(View.INVISIBLE);
+                            }
+                        } else {
+                            name = snapshot.child("name").getValue(String.class);
+                            surname = snapshot.child("surname").getValue(String.class);
+                        }
+
+                        String university = snapshot.child("university").getValue(String.class);
+                        String department = snapshot.child("department").getValue(String.class);
+                        profile_TextViewName.setText(name);
+                        profile_TextViewSurname.setText(surname);
+
+                        if (university == null || university.equals("")) {
+                            university_name.setHint("Insert your university!");
+                        } else {
+                            university_name.setText(university);
+                        }
+
+                        if (department == null || department.equals("")) {
+                            profile_edDepartment.setHint("Insert your department!");
+                        } else {
+                            profile_edDepartment.setText(department);
+                        }
+
+                        LoadMap();
                     }
+                }
 
-                    addresses = geocoder.getFromLocationName(university_name.getText().toString(), 1);
-
-                    if (addresses.size() > 0) {
-                        double latitude = addresses.get(0).getLatitude();
-                        double longitude = addresses.get(0).getLongitude();
-
-                        LatLng latLng = new LatLng(latitude, longitude);
-
-                        mMap.addMarker(new MarkerOptions().position(latLng).title("University"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-                    }
-                } catch (IOException e) {
-                    Log.d("TAG", "Google Maps: onMapReady");
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d("TAG", "Database: onCancelled");
                 }
             });
+        }
+
+        private void LoadMap() {
+            List<Address> addresses;
+            Geocoder geocoder = new Geocoder(getActivity());
+
+            try {
+                if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    RequestPermissions();
+                } else {    // permission already granted
+                    mMap.setMyLocationEnabled(true);
+                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                }
+
+                addresses = geocoder.getFromLocationName(university_name.getText().toString(), 1);
+
+                if (addresses.size() > 0) {
+                    double latitude = addresses.get(0).getLatitude();
+                    double longitude = addresses.get(0).getLongitude();
+
+                    LatLng latLng = new LatLng(latitude, longitude);
+
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("University"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                }
+
+            } catch (IOException e) {
+                Log.d("TAG", "Google Maps: onMapReady");
+            }
         }
     }
 }
