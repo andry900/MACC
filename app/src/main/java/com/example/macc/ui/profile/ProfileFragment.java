@@ -167,9 +167,6 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
 
                             Thread t1 = new Thread(new RunnableImpl(), "t1");
                             t1.start();
-
-                            Thread t2 = new Thread(new RunnableImpl(), "t2");
-                            t2.start();
                         }
                     }
 
