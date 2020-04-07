@@ -42,6 +42,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import android.os.Handler;
 
+import java.util.Objects;
+
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
@@ -149,6 +151,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                         .replace(R.id.nav_host_fragment, new HomeFragment(),"fragment_home")
                         .addToBackStack(null)
                         .commit();
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Virgilio");
                 break;
 
             case R.id.nav_profile:
@@ -158,6 +161,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                         .replace(R.id.nav_host_fragment, new ProfileFragment(),"fragment_profile")
                         .addToBackStack(null)
                         .commit();
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Profile");
                 break;
 
             case R.id.nav_reviews:
@@ -167,6 +171,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                         .replace(R.id.nav_host_fragment, new ReviewsFragment(),"fragment_reviews")
                         .addToBackStack(null)
                         .commit();
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Reviews");
                 break;
 
             case R.id.nav_info:
@@ -176,6 +181,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                         .replace(R.id.nav_host_fragment, new InformationFragment(),"fragment_info")
                         .addToBackStack(null)
                         .commit();
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Information");
                 break;
 
             case R.id.nav_logout:
@@ -203,6 +209,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             navigationView.getMenu().getItem(1).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
+            Objects.requireNonNull(getSupportActionBar()).setTitle("Virgilio");
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment instanceof ReviewsFragment) {
@@ -213,6 +220,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             navigationView.getMenu().getItem(2).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
+            Objects.requireNonNull(getSupportActionBar()).setTitle("Virgilio");
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment instanceof FillFragmentReview) {
@@ -235,6 +243,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             navigationView.getMenu().getItem(3).setChecked(false);
             navigationView.getMenu().getItem(0).setChecked(true);
+            Objects.requireNonNull(getSupportActionBar()).setTitle("Virgilio");
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment instanceof ShowFragmentHome) {
