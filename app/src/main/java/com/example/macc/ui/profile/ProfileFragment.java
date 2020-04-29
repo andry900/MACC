@@ -91,7 +91,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                             universities.add(jsonObject.getString("name"));
                         }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
                                 android.R.layout.simple_list_item_1, universities);
 
                         university_name.setAdapter(adapter);
@@ -122,7 +122,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                     , "Political, Social and International Sciences", "Sociology"
             };
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
                     android.R.layout.simple_list_item_1, departments);
 
             profile_edDepartment.setAdapter(adapter);
@@ -205,7 +205,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void ReloadFragment() {
-        Objects.requireNonNull(getActivity())
+        requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment, new ProfileFragment())
@@ -276,8 +276,8 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
             Geocoder geocoder = new Geocoder(getActivity());
 
             try {
-                if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                     RequestPermissions();
                 } else {    // permission already granted

@@ -38,7 +38,7 @@ public class ReviewsFragment extends Fragment {
         //SET THE HEIGHT OF LIST_VIEW TO 0.75 OF THE SCREEN
         ViewGroup.LayoutParams params = myReview_listView.getLayoutParams();
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         params.height  = (int) (height * 0.75);//(int) (params.height * 0.8);
         myReview_listView.setLayoutParams(params);
@@ -54,7 +54,7 @@ public class ReviewsFragment extends Fragment {
                             .getItemAtPosition(position)
                             .toString());
 
-            Objects.requireNonNull(getActivity())
+            requireActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment, showFragmentReview,"fragment_showReview")
@@ -66,7 +66,7 @@ public class ReviewsFragment extends Fragment {
             fillFragmentReview.setUniversity(current_university);
             fillFragmentReview.setDepartment(current_department);
 
-            Objects.requireNonNull(getActivity())
+            requireActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment, fillFragmentReview,"fragment_fillReview")

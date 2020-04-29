@@ -135,7 +135,7 @@ public class FillFragmentReview extends Fragment {
                                             toast.setGravity(Gravity.CENTER, 0, 0);
                                             toast.show();
 
-                                            Objects.requireNonNull(getActivity())
+                                            requireActivity()
                                                     .getSupportFragmentManager()
                                                     .beginTransaction()
                                                     .replace(R.id.nav_host_fragment, new ReviewsFragment(),"fragment_reviews")
@@ -174,7 +174,7 @@ public class FillFragmentReview extends Fragment {
                                         toast.setGravity(Gravity.CENTER, 0, 0);
                                         toast.show();
 
-                                        Objects.requireNonNull(getActivity())
+                                        requireActivity()
                                                 .getSupportFragmentManager()
                                                 .beginTransaction()
                                                 .replace(R.id.nav_host_fragment, new ReviewsFragment(),"fragment_reviews")

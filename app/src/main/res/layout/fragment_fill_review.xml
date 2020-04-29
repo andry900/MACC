@@ -163,6 +163,8 @@
         android:scrollbars="vertical"
         android:hint="@string/insert_your_comments"
         android:gravity="start"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:textSize="15sp"
         android:textColor="#000" />
 

@@ -145,7 +145,7 @@ public class HomeFragment extends Fragment {
                             .getItemAtPosition(position)
                             .toString());
 
-            Objects.requireNonNull(getActivity())
+            requireActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment, showFragmentHome,"fragment_show_home")

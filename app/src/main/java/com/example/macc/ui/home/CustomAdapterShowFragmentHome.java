@@ -38,18 +38,15 @@ public class CustomAdapterShowFragmentHome extends ArrayAdapter<String> {
 
         comment.setText(comments.get(position));
         comment.setMovementMethod(new ScrollingMovementMethod());
-        View.OnTouchListener listener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                boolean isLarger;
-                isLarger = ((TextView) v).getLineCount() * ((TextView) v).getLineHeight() > v.getHeight();
-                if (event.getAction() == MotionEvent.ACTION_MOVE && isLarger) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                } else {
-                    v.getParent().requestDisallowInterceptTouchEvent(false);
-                }
-                return false;
+        View.OnTouchListener listener = (v, event) -> {
+            boolean isLarger;
+            isLarger = ((TextView) v).getLineCount() * ((TextView) v).getLineHeight() > v.getHeight();
+            if (event.getAction() == MotionEvent.ACTION_MOVE && isLarger) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+            } else {
+                v.getParent().requestDisallowInterceptTouchEvent(false);
             }
+            return false;
         };
         comment.setOnTouchListener(listener);
         mark.setText(marks.get(position));
