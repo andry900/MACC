@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
             Call<ResponseBody> call = service.getRequest();
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<ResponseBody> _, Response<ResponseBody> response) {
+                public void onResponse(Call<ResponseBody> responseBodyCall, Response<ResponseBody> response) {
                     try {
                         ArrayList<String> universities = new ArrayList<>();
                         String universities_JSON = response.body().string();
@@ -102,7 +102,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> _, Throwable t) {
+                public void onFailure(Call<ResponseBody> responseBodyCall, Throwable t) {
                     Log.d("TAG", "Callback: onFailure");
                 }
             });

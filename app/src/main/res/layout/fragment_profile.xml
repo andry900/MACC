@@ -40,7 +40,7 @@
         android:completionThreshold="1"
         android:fontFamily="@font/amita"
         android:hint="@string/labUniName"
-        android:textColorHint="#000"
+        android:textColorHint="#808080"
         android:textColor="#000" />
 
     <com.google.android.gms.maps.MapView
@@ -75,6 +75,8 @@
         android:layout_toEndOf="@+id/profile_labDepartment"
         android:completionThreshold="1"
         android:background="#E6CDA8"
+        android:hint="@string/insert_your_department"
+        android:textColorHint="#808080"
         android:gravity="center"
         android:textColor="#000"
         android:textSize="15sp" />
